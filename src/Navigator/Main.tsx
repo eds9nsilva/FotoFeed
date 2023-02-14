@@ -1,6 +1,6 @@
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { Home, NewRevenue } from '@/Container'
+import { Home, NewRevenue } from '@/Screens'
 import { TabBarLabel } from './styles'
 
 const Tab = createBottomTabNavigator()

@@ -1,7 +1,6 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-
-import MainNavigator from './Main'
+import { Home } from '@/Screens'
 
 const Stack = createStackNavigator()
 
@@ -11,7 +10,7 @@ const StackNavigator = () => {
       detachInactiveScreens={false}
       screenOptions={{ headerShown: false }}
     >
-      <Stack.Screen name="Main" component={MainNavigator} />
+      <Stack.Screen name="Main" component={Home} />
     </Stack.Navigator>
   )
 }

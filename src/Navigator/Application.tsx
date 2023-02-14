@@ -10,7 +10,11 @@ const Stack = createStackNavigator()
 const ApplicationNavigator = () => {
   return (
     <NavigationContainer ref={navigationRef}>
-      <StatusBar backgroundColor="#1D3557" barStyle={'light-content'} />
+      <StatusBar
+        backgroundColor="transparent"
+        barStyle={'light-content'}
+        translucent
+      />
       <Stack.Navigator
         detachInactiveScreens={false}
         screenOptions={{ headerShown: false }}
