@@ -1,18 +1,17 @@
 import { getPhotos } from '@/Services/Photos/getPhotos'
 import React from 'react'
 import { useState, useEffect } from 'react'
-import { FlatList, TouchableOpacity, Dimensions } from 'react-native'
-import FastImage from 'react-native-fast-image'
-import { Container } from './styles'
+import { FlatList } from 'react-native'
+import { ImageBackground } from './styles'
 import { Photo, ResponseData } from '@/Services/Types/Photos'
+import { InputSearch } from '@/Components/Header/styles'
+import { Header } from '@/Components'
 
 interface Itens {
   item: Photo
 }
 const Home = () => {
   const [photos, setPhotos] = useState<ResponseData>()
-  const width = Dimensions.get('window').width
-  const height = Dimensions.get('window').height
 
   const getMorePhotos = async () => {
     const res = await getPhotos()
@@ -25,14 +24,14 @@ const Home = () => {
 
   const renderItem = (item: Itens) => {
     return (
-      <Container>
-        <FastImage
-          source={{
-            uri: item.item.src.large2x,
-          }}
-          style={{ width: width, height: height, flex: 1 }}
-        />
-      </Container>
+      <ImageBackground
+        source={{
+          uri: item.item.src.large2x,
+        }}
+        resizeMode={'cover'}
+      >
+        <Header />
+      </ImageBackground>
     )
   }
 
