@@ -9,7 +9,7 @@ const App = () => {
       <ApplicationNavigator />
       <Toast
         ref={ref => ((global as any)['toast'] = ref)}
-        placement="top"
+        placement="bottom"
         textStyle={{fontSize: 16}}
         successColor="#28a745"
         dangerColor="#d0383e"

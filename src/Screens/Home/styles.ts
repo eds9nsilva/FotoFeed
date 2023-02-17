@@ -4,11 +4,6 @@ import { Dimensions } from 'react-native'
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
-export const Container = styled.View`
-  align-items: center;
-  justify-content: center;
-`
-
 export const ImageBackground = styled(FastImage)`
   width: ${width}px;
   height: ${height}px;
@@ -16,4 +11,16 @@ export const ImageBackground = styled(FastImage)`
   align-items: center;
   padding-top: 40px;
   z-index: 0;
+`
+
+export const Content = styled.View`
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+`
+
+export const Author = styled.Text`
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
 `
