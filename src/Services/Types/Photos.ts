@@ -21,6 +21,11 @@ export interface Photo {
   alt: string
 }
 
+export interface Photos {
+  photos: Photo[]
+  loading: boolean
+}
+
 export interface ResponseData {
   page: number
   per_page: number

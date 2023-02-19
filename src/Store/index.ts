@@ -11,17 +11,17 @@ import {
   REGISTER,
 } from 'redux-persist'
 import { configureStore } from '@reduxjs/toolkit'
-
 import { useDispatch } from 'react-redux'
 
-const reducers = combineReducers({
+import photos from './Photos/getPhotos'
 
+const reducers = combineReducers({
+  photos,
 })
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['theme', 'signIn'],
 }
 
 const persistedReducer = persistReducer(persistConfig, reducers)
@@ -36,12 +36,6 @@ const store = configureStore({
         serializableCheck: { ignoredPaths: ['some.nested.path'] },
       },
     })
-
-    if (__DEV__ && !process.env.JEST_WORKER_ID) {
-      const createDebugger = require('redux-flipper').default
-      middlewares.push(createDebugger())
-    }
-
     return middlewares
   },
 })

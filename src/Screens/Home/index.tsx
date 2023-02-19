@@ -1,27 +1,26 @@
-import { getPhotos } from '@/Services/Photos/getPhotos'
-import React from 'react'
-import { useState, useEffect } from 'react'
+import React, { useCallback } from 'react'
+import { useEffect } from 'react'
 import { FlatList, Platform } from 'react-native'
 import { Author, Content, ImageBackground } from './styles'
-import { Photo, ResponseData } from '@/Services/Types/Photos'
+import { Photo } from '@/Services/Types/Photos'
 import { Buttons, Header } from '@/Components'
 import LoadingImage from '@/Components/LoadingImage'
 import RNFetchBlob from 'rn-fetch-blob'
-import AwesomeAlert from 'react-native-awesome-alerts'
 import { Alert } from 'react-native'
+import { useDispatch } from 'react-redux'
+import { asyncGetPhotos } from '@/Store/Photos/getPhotos'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/Store'
 
 interface Itens {
   item: Photo
 }
 const Home = () => {
-  const [photos, setPhotos] = useState<ResponseData>()
-  const [loading, setLoading] = useState(false)
+  const dispatch = useDispatch()
 
-  const getMorePhotos = async () => {
-    setLoading(true)
-    const res = await getPhotos().finally(() => setLoading(false))
-    setPhotos(res)
-  }
+  const { photos, loading: loadingPhotos } = useSelector(
+    (state: RootState) => state.photos,
+  )
 
   const handlerAlert = (url: string, name: string) =>
     Alert.alert('Aviso', 'Deseja fazer download desta imagem?', [
@@ -67,8 +66,10 @@ const Home = () => {
 
   const shareImage = () => {}
 
+  const getPhotos = useCallback(() => dispatch(asyncGetPhotos()), [])
+
   useEffect(() => {
-    getMorePhotos()
+    getPhotos()
   }, [])
 
   const renderItem = ({ item }: Itens) => {
@@ -94,16 +95,18 @@ const Home = () => {
     )
   }
 
-  return loading ? (
-    <LoadingImage />
-  ) : (
-    photos?.photos && (
+  if (loadingPhotos) {
+    return <LoadingImage />
+  }
+
+  return (
+    photos && (
       <FlatList
-        data={photos.photos}
+        data={photos}
         keyExtractor={item => String(item.id)}
         renderItem={renderItem}
         pagingEnabled
-        initialNumToRender={photos.photos.length}
+        initialNumToRender={photos.length}
         showsVerticalScrollIndicator={false}
       />
     )
