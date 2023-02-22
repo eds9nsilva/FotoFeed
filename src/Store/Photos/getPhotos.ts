@@ -1,10 +1,20 @@
-import { getPhotos } from '@/Services/Photos/getPhotos'
+import { getPhotos, searchPhotos } from '@/Services/Photos/getPhotos'
+import { Filter } from '@/Services/Types/Filters'
 import { Photos } from '@/Services/Types/Photos'
 import { createSlice } from '@reduxjs/toolkit'
 import { AppDispatch } from '..'
 
+const initialFilter: Filter = {
+  page: 1,
+  per_page: 80,
+  query: '',
+  next_page: '',
+  prev_page: '',
+}
+
 const initialState: Photos = {
   photos: [],
+  filter: initialFilter,
   loading: false,
 }
 
@@ -18,6 +28,9 @@ const photos = createSlice({
     setPhotos(state, { payload }) {
       state.photos = payload
     },
+    setOptionFilter(state, {payload}) {
+      state.filter = payload
+    }
   },
 })
 
@@ -28,7 +41,21 @@ export function asyncGetPhotos() {
   return async function (dispatch: AppDispatch) {
     dispatch(toggleLoading(true))
     try {
-      const response = await getPhotos()
+      const response = await getPhotos(initialState.filter)
+      dispatch(setPhotos(response?.photos))
+    } catch (error) {
+      console.log(error)
+    } finally {
+      dispatch(toggleLoading(false))
+    }
+  }
+}
+
+export function asyncSearchPhotos() {
+  return async function (dispatch: AppDispatch) {
+    dispatch(toggleLoading(true))
+    try {
+      const response = await searchPhotos(initialState.filter)
       dispatch(setPhotos(response?.photos))
     } catch (error) {
       console.log(error)

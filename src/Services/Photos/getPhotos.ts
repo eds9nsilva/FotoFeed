@@ -1,5 +1,6 @@
 import instance from '@/Services'
 import { ResponseData } from '@/Services/Types/Photos'
+import { Filter } from '../Types/Filters'
 
 const data = {
   page: 1,
@@ -444,10 +445,23 @@ const data = {
   total_results: 8000,
   next_page: 'https://api.pexels.com/v1/curated/?page=2&per_page=15',
 }
-export const getPhotos = async () => {
+export const getPhotos = async (payload: Filter) => {
   try {
-    // const res = await instance.get<ResponseData>('/curated')
+    /*const res = await instance.get<ResponseData>(
+      `/curated?page=${payload.page}&per_page=${payload.per_page}`,
+    ) */
     return data
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const searchPhotos = async (payload: Filter): Promise<T> => {
+  try {
+    const res = await instance.get<ResponseData>(
+      `/search?query=nature&per_page=1`,
+    ) // search?query=nature
+    res.data
   } catch (error) {
     console.log(error)
   }

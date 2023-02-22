@@ -1,3 +1,5 @@
+import { Filter } from "./Filters"
+
 export interface Photo {
   id: number
   width: number
@@ -23,6 +25,7 @@ export interface Photo {
 
 export interface Photos {
   photos: Photo[]
+  filter: Filter
   loading: boolean
 }
 
