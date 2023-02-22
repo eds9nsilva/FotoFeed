@@ -18,7 +18,7 @@ interface Itens {
 const Home = () => {
   const dispatch = useDispatch()
 
-  const { photos, loading: loadingPhotos } = useSelector(
+  const { photos, loading: loadingPhotos, filter } = useSelector(
     (state: RootState) => state.photos,
   )
 
@@ -66,7 +66,7 @@ const Home = () => {
 
   const shareImage = () => {}
 
-  const getPhotos = useCallback(() => dispatch(asyncGetPhotos()), [])
+  const getPhotos = useCallback(() => dispatch(asyncGetPhotos(filter)), [])
 
   useEffect(() => {
     getPhotos()

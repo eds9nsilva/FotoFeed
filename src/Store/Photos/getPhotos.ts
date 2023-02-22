@@ -34,14 +34,14 @@ const photos = createSlice({
   },
 })
 
-export const { setPhotos, toggleLoading } = photos.actions
+export const { setPhotos, toggleLoading, setOptionFilter } = photos.actions
 export default photos.reducer
 
-export function asyncGetPhotos() {
+export function asyncGetPhotos(payload: Filter) {
   return async function (dispatch: AppDispatch) {
     dispatch(toggleLoading(true))
     try {
-      const response = await getPhotos(initialState.filter)
+      const response = await getPhotos(payload)
       dispatch(setPhotos(response?.photos))
     } catch (error) {
       console.log(error)
@@ -51,11 +51,11 @@ export function asyncGetPhotos() {
   }
 }
 
-export function asyncSearchPhotos() {
+export function asyncSearchPhotos(payload: Filter) {
   return async function (dispatch: AppDispatch) {
     dispatch(toggleLoading(true))
     try {
-      const response = await searchPhotos(initialState.filter)
+      const response = await searchPhotos(payload)
       dispatch(setPhotos(response?.photos))
     } catch (error) {
       console.log(error)

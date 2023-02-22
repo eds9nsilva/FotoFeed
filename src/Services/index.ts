@@ -7,7 +7,7 @@ const instance = axios.create({
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${Config.KEY}`,
+    Authorization: ` Client-ID ${Config.KEY}`,
   },
   timeout: 3000,
 })

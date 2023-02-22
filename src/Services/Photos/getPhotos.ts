@@ -447,21 +447,20 @@ const data = {
 }
 export const getPhotos = async (payload: Filter) => {
   try {
-    /*const res = await instance.get<ResponseData>(
-      `/curated?page=${payload.page}&per_page=${payload.per_page}`,
-    ) */
-    return data
+    const res = await instance.get<ResponseData>(
+      `/photos?page=${payload.page}`,
+    )
+    return res.data
   } catch (error) {
     console.log(error)
   }
 }
 
-export const searchPhotos = async (payload: Filter): Promise<T> => {
+export const searchPhotos = async (payload: Filter) => {
   try {
-    const res = await instance.get<ResponseData>(
-      `/search?query=nature&per_page=1`,
-    ) // search?query=nature
-    res.data
+    const res = await instance.get(`/search?query=nature&per_page=1`) // search?query=nature
+    console.log(res)
+    return res.data
   } catch (error) {
     console.log(error)
   }
