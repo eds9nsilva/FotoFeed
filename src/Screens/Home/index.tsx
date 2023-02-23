@@ -1,8 +1,8 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useEffect } from 'react'
 import { FlatList, Platform } from 'react-native'
-import { Author, Content, ImageBackground } from './styles'
-import { Photo } from '@/Services/Types/Photos'
+import { Author, Content, ContentLoading, ImageBackground } from './styles'
+import { UnsplashImage } from '@/Services/Types/Photos'
 import { Buttons, Header } from '@/Components'
 import LoadingImage from '@/Components/LoadingImage'
 import RNFetchBlob from 'rn-fetch-blob'
@@ -11,16 +11,19 @@ import { useDispatch } from 'react-redux'
 import { asyncGetPhotos } from '@/Store/Photos/getPhotos'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/Store'
+import Loading from 'react-native-spinkit'
 
 interface Itens {
-  item: Photo
+  item: UnsplashImage
 }
 const Home = () => {
   const dispatch = useDispatch()
-
-  const { photos, loading: loadingPhotos, filter } = useSelector(
-    (state: RootState) => state.photos,
-  )
+  const [loading, setLoading] = useState(false)
+  const {
+    photos,
+    loading: loadingPhotos,
+    filter,
+  } = useSelector((state: RootState) => state.photos)
 
   const handlerAlert = (url: string, name: string) =>
     Alert.alert('Aviso', 'Deseja fazer download desta imagem?', [
@@ -76,20 +79,27 @@ const Home = () => {
     return (
       <ImageBackground
         source={{
-          uri: item.src.large2x,
+          uri: item.urls.regular,
           priority: 'high',
         }}
+        onLoadStart={() => setLoading(true)}
+        onLoadEnd={() => setLoading(false)}
         resizeMode={'cover'}
       >
         <Header />
+        {loading && (
+          <ContentLoading>
+            <Loading type="9CubeGrid" size={42} color={'#fff'} />
+          </ContentLoading>
+        )}
         <Buttons
           share={() => shareImage()}
           download={() =>
-            handlerAlert(item.src.large2x, `Photo-by ${item.photographer}`)
+            handlerAlert(item.urls.regular, `Photo-by ${item.user.username}`)
           }
         />
         <Content>
-          <Author>Fotografo(a): {item.photographer}</Author>
+          <Author>Fotografo(a): {item.user.username}</Author>
         </Content>
       </ImageBackground>
     )

@@ -1,38 +1,64 @@
 import { Filter } from "./Filters"
 
-export interface Photo {
-  id: number
-  width: number
-  height: number
-  url: string
-  photographer: string
-  photographer_url: string
-  photographer_id: number
-  avg_color: string
-  src: {
-    original: string
-    large2x: string
-    large: string
-    medium: string
-    small: string
-    portrait: string
-    landscape: string
-    tiny: string
-  }
-  liked: boolean
-  alt: string
+export interface UnsplashImage {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  promoted_at: string | null;
+  width: number;
+  height: number;
+  color: string;
+  blur_hash: string;
+  description: string | null;
+  alt_description: string;
+  urls: {
+    raw: string;
+    full: string;
+    regular: string;
+    small: string;
+    thumb: string;
+    small_s3: string;
+  };
+  links: {
+    self: string;
+    html: string;
+    download: string;
+    download_location: string;
+  };
+  likes: number;
+  liked_by_user: boolean;
+  current_user_collections: any[];
+  sponsorship: any;
+  topic_submissions: Record<string, never>;
+  user: {
+    id: string;
+    updated_at: string;
+    username: string;
+    name: string;
+    first_name: string;
+    last_name: string;
+    twitter_username: string | null;
+    portfolio_url: string | null;
+    bio: string | null;
+    location: string | null;
+    links: {
+      self: string;
+      html: string;
+      photos: string;
+      likes: string;
+      portfolio: string;
+      following: string;
+      followers: string;
+    };
+    profile_image: {
+      small: string;
+    };
+  };
 }
+
 
 export interface Photos {
-  photos: Photo[]
+  photos: UnsplashImage[]
   filter: Filter
   loading: boolean
-}
-
-export interface ResponseData {
-  page: number
-  per_page: number
-  photos: Photo[]
-  total_results: number
-  next_page: string
 }

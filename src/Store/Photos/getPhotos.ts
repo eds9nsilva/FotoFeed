@@ -42,7 +42,7 @@ export function asyncGetPhotos(payload: Filter) {
     dispatch(toggleLoading(true))
     try {
       const response = await getPhotos(payload)
-      dispatch(setPhotos(response?.photos))
+      dispatch(setPhotos(response))
     } catch (error) {
       console.log(error)
     } finally {

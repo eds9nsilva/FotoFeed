@@ -10,6 +10,7 @@ export const ImageBackground = styled(FastImage)`
   flex: 1;
   align-items: center;
   padding-top: 40px;
+  background-color: #181a20;
   z-index: 0;
 `
 
@@ -23,4 +24,10 @@ export const Author = styled.Text`
   font-size: 18px;
   font-weight: 600;
   color: #fff;
+`
+
+export const ContentLoading = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
 `
