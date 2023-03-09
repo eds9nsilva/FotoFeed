@@ -1,6 +1,7 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { Home } from '@/Screens'
+import DrawerContainer from './DrawerStack'
 
 const Stack = createStackNavigator()
 
@@ -10,7 +11,10 @@ const StackNavigator = () => {
       detachInactiveScreens={false}
       screenOptions={{ headerShown: false }}
     >
-      <Stack.Screen name="Main" component={Home} />
+      <Stack.Screen
+        name="Main"
+        component={DrawerContainer}
+      />
     </Stack.Navigator>
   )
 }

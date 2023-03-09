@@ -5,10 +5,12 @@ import { TouchableOpacity } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { asyncSearchPhotos, setOptionFilter } from '@/Store/Photos/getPhotos'
 import { RootState } from '@/Store'
+import { DrawerActions, useNavigation } from '@react-navigation/native'
 
 const Header = () => {
   const dispatch = useDispatch()
   const [search, setSearch] = useState('')
+  const navigation = useNavigation()
 
   const { filter } = useSelector((state: RootState) => state.photos)
 
@@ -22,10 +24,13 @@ const Header = () => {
     dispatch(asyncSearchPhotos(newFilter))
   }
 
+  const handleOpenDrawer = () => {
+    navigation.dispatch(DrawerActions.openDrawer())
+  }
   return (
     <>
       <Container>
-        <TouchableOpacity activeOpacity={0.6}>
+        <TouchableOpacity activeOpacity={0.6} onPress={() => handleOpenDrawer()}>
           <List color="#fff" size={41} style={{ right: 42 }} />
         </TouchableOpacity>
         <InputSearch

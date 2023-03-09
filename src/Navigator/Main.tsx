@@ -1,29 +1,20 @@
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { Home, NewRevenue } from '@/Screens'
+import { Home } from '@/Screens'
 import { TabBarLabel } from './styles'
+import { createStackNavigator } from '@react-navigation/stack'
 
 const Tab = createBottomTabNavigator()
+const Stack = createStackNavigator()
 
 const MainNavigator = () => {
   return (
-    <Tab.Navigator
+    <Stack.Navigator
       initialRouteName="home"
-      screenOptions={{ headerShown: false, tabBarShowLabel: true }}
+      screenOptions={{ headerShown: false}}
     >
-      <Tab.Screen
-        name="home"
-        component={Home}
-        options={{
-          title: 'Início',
-          tabBarLabel: ({ focused }) => (
-            <TabBarLabel color={focused ? '#457B9D' : '#1D3557'}>
-              Início
-            </TabBarLabel>
-          ),
-        }}
-      />
-    </Tab.Navigator>
+      <Stack.Screen name="home" component={Home} />
+    </Stack.Navigator>
   )
 }
 
