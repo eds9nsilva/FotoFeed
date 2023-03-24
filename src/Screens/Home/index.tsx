@@ -1,18 +1,16 @@
 import React, { useCallback, useState } from 'react'
 import { useEffect } from 'react'
-import { FlatList, Platform } from 'react-native'
+import { Platform, Alert } from 'react-native'
 import { Author, Content, ContentLoading, ImageBackground } from './styles'
 import { UnsplashImage } from '@/Services/Types/Photos'
 import { Buttons, Header } from '@/Components'
 import LoadingImage from '@/Components/LoadingImage'
 import RNFetchBlob from 'rn-fetch-blob'
-import { Alert } from 'react-native'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { asyncGetPhotos } from '@/Store/Photos/getPhotos'
-import { useSelector } from 'react-redux'
 import { RootState } from '@/Store'
 import Loading from 'react-native-spinkit'
-
+import { FlashList } from "@shopify/flash-list";
 interface Itens {
   item: UnsplashImage
 }
@@ -111,12 +109,11 @@ const Home = () => {
 
   return (
     photos && (
-      <FlatList
+      <FlashList
         data={photos}
         keyExtractor={item => String(item.id)}
         renderItem={renderItem}
         pagingEnabled
-        initialNumToRender={photos.length}
         showsVerticalScrollIndicator={false}
       />
     )
