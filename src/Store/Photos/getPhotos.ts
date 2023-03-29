@@ -1,20 +1,13 @@
+import { DefaultFilter } from '@/Constants/OptionFilter'
 import { getPhotos, searchPhotos } from '@/Services/Photos/getPhotos'
 import { Filter } from '@/Services/Types/Filters'
 import { Photos } from '@/Services/Types/Photos'
 import { createSlice } from '@reduxjs/toolkit'
 import { AppDispatch } from '..'
 
-const initialFilter: Filter = {
-  page: 1,
-  per_page: 80,
-  query: '',
-  next_page: '',
-  prev_page: '',
-}
-
 const initialState: Photos = {
   photos: [],
-  filter: initialFilter,
+  filter: DefaultFilter,
   loading: false,
 }
 
@@ -28,9 +21,9 @@ const photos = createSlice({
     setPhotos(state, { payload }) {
       state.photos = payload
     },
-    setOptionFilter(state, {payload}) {
+    setOptionFilter(state, { payload }) {
       state.filter = payload
-    }
+    },
   },
 })
 

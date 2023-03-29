@@ -5,6 +5,9 @@ import { Provider } from 'react-redux'
 import 'react-native-gesture-handler'
 import { PersistGate } from 'redux-persist/lib/integration/react'
 import { persistor, store } from './Store'
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+LogBox.ignoreAllLogs();//Ignore all log notifications
 
 const App = () => {
   return (

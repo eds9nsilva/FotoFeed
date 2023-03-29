@@ -22,7 +22,6 @@ const Home = () => {
     loading: loadingPhotos,
     filter,
   } = useSelector((state: RootState) => state.photos)
-
   const handlerAlert = (url: string, name: string) =>
     Alert.alert('Aviso', 'Deseja fazer download desta imagem?', [
       {

@@ -34,7 +34,7 @@ export const Categories = styled.TouchableOpacity`
   align-items: center;
 `
 export const TextCategories = styled.Text`
-  font-size: 12px;
+  font-size: 14px;
   color: #fff;
   text-align: center;
 `
@@ -42,4 +42,19 @@ export const TextCategories = styled.Text`
 export const Logo = styled(FastImage)`
   width: 200px;
   height: 100px;
+`
+
+export const Button = styled.TouchableOpacity`
+  width: auto;
+  height: auto;
+  padding: 12px;
+  border-color: #fff;
+  border-width: 1.4px;
+  margin-top: 12px;
+`
+
+export const TextButton = styled.Text`
+  font-size: 14px;
+  color: #fff;
+  text-align: center;
 `
