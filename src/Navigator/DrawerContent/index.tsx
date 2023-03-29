@@ -1,11 +1,42 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   DrawerContentScrollView,
   DrawerContentComponentProps,
 } from '@react-navigation/drawer'
-import { Container, Item, Title } from './styles'
+import {
+  Container,
+  Item,
+  Title,
+  Logo,
+  Categories,
+  Content,
+  TextCategories,
+} from './styles'
+import image from '@/Asserts/logo.png'
+import { ArrowDown, ArrowRight } from 'phosphor-react-native'
+import { OptionFilter } from '@/Constants/OptionFilter'
+import { FlashList } from '@shopify/flash-list'
 
-const Drawer: React.FC<DrawerContentComponentProps> = props => {
+const Drawer: React.FC<DrawerContentComponentProps> = () => {
+  const [open, setOpen] = useState(false)
+
+  const listCategoriesFilter = () => {
+    return (
+      <FlashList
+        data={OptionFilter}
+        keyExtractor={item => String(item.id)}
+        numColumns={2}
+        renderItem={item => {
+          return (
+            <Categories>
+              <TextCategories>{item.item.name}</TextCategories>
+            </Categories>
+          )
+        }}
+      />
+    )
+  }
+
   return (
     <DrawerContentScrollView
       contentContainerStyle={{
@@ -15,8 +46,26 @@ const Drawer: React.FC<DrawerContentComponentProps> = props => {
       showsVerticalScrollIndicator={false}
     >
       <Container>
+        <Logo source={image} />
         <Item>
-          <Title>Filtro</Title>
+          <Content onPress={() => setOpen(!open)}>
+            <Title>CATEGORIAS</Title>
+            {open ? (
+              <ArrowRight
+                color="#ffff"
+                style={{ top: 10, left: 8 }}
+                size={22}
+              />
+            ) : (
+              <ArrowDown color="#ffff" style={{ top: 10, left: 8 }} size={22} />
+            )}
+          </Content>
+          {open && listCategoriesFilter()}
+        </Item>
+        <Item>
+          <Content onPress={() => {}}>
+            <Title>FAVORITOS</Title>
+          </Content>
         </Item>
       </Container>
     </DrawerContentScrollView>

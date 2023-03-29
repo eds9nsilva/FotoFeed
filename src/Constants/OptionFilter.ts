@@ -1,0 +1,18 @@
+export const OptionFilter = [
+  { id: 1, name: 'Paisagem', value: 'landscape' },
+  { id: 2, name: 'Retrato', value: 'portrait' },
+  { id: 3, name: 'Animais', value: 'animals' },
+  { id: 4, name: 'Comida', value: 'food' },
+  { id: 5, name: 'Arquitetura', value: 'architecture' },
+  { id: 5, name: 'Arquitetura', value: 'architecture' },
+  { id: 6, name: 'Esportes', value: 'sports' },
+  { id: 7, name: 'Moda', value: 'fashion' },
+  { id: 8, name: 'Natureza morta', value: 'still_life' },
+  { id: 9, name: 'Viagens', value: 'travel' },
+  { id: 10, name: 'Macro', value: 'macro' },
+  { id: 11, name: 'Preto e branco', value: 'black_and_white' },
+  { id: 12, name: 'Retrato de animais', value: 'animal_portrait' },
+  { id: 13, name: 'Fotografia de rua', value: 'street_photography' },
+  { id: 14, name: 'Arte digital', value: 'digital_art' },
+  { id: 15, name: 'Fotografia de viagem', value: 'travel_photography' },
+]
