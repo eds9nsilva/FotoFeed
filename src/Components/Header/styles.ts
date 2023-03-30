@@ -13,6 +13,7 @@ export const InputSearch = styled.TextInput`
   border-width: 2px;
   border-color: #fff;
   padding-left: 12px;
+  color: #fff;
 `
 export const ButtonSearch = styled.TouchableOpacity`
   width: 40px;

@@ -19,7 +19,13 @@ const photos = createSlice({
       state.loading = payload
     },
     setPhotos(state, { payload }) {
-      state.photos = payload
+      if (state.filter.page === 1) {
+        state.photos = payload
+      } else {
+        const existingIds = state.photos.map(photo => photo.id);
+        const newPhotos = payload.filter(photo => !existingIds.includes(photo.id));
+        state.photos = [...state.photos, ...newPhotos];
+      }
     },
     setOptionFilter(state, { payload }) {
       state.filter = payload

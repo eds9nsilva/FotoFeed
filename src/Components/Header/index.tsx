@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ButtonSearch, Container, InputSearch } from './styles'
 import { MagnifyingGlass, List } from 'phosphor-react-native'
-import { TouchableOpacity } from 'react-native'
+import { Platform, TouchableOpacity } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { asyncSearchPhotos, setOptionFilter } from '@/Store/Photos/getPhotos'
 import { RootState } from '@/Store'
@@ -13,6 +13,10 @@ const Header = () => {
   const navigation = useNavigation()
 
   const { filter } = useSelector((state: RootState) => state.photos)
+
+  useEffect(() => {
+    filter.query && setSearch(filter.query)
+  }, [filter.query])
 
   const searchImages = async () => {
     if (search.length < 1) return
@@ -29,7 +33,7 @@ const Header = () => {
   }
   return (
     <>
-      <Container>
+      <Container enabled>
         <TouchableOpacity
           activeOpacity={0.6}
           onPress={() => handleOpenDrawer()}
@@ -40,6 +44,9 @@ const Header = () => {
           placeholder="Pesquisar imagem"
           placeholderTextColor={'#fff'}
           value={search}
+          onSubmitEditing={() => {
+            searchImages()
+          }}
           onChangeText={value => setSearch(value)}
         />
         <ButtonSearch activeOpacity={0.6} onPress={() => searchImages()}>
