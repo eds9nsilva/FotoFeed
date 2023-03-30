@@ -794,8 +794,8 @@ const data = [
 ]
 export const getPhotos = async (payload: Filter) => {
   try {
-    // const res = await instance.get<UnsplashImage[]>(`/photos?page=${payload.page}`)
-    return data
+    const res = await instance.get<UnsplashImage[]>(`/photos?page=${payload.page}`)
+    return res.data
   } catch (error) {
     console.log(error)
   }
@@ -803,8 +803,7 @@ export const getPhotos = async (payload: Filter) => {
 
 export const searchPhotos = async (payload: Filter) => {
   try {
-    const res = await instance.get(`/search?query=nature&per_page=1`) // search?query=nature
-    console.log(res)
+    const res = await instance.get(`/search?query=${payload.query}&page=${payload.page}`) // search?query=nature
     return res.data
   } catch (error) {
     console.log(error)

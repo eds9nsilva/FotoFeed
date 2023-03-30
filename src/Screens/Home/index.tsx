@@ -22,6 +22,7 @@ const Home = () => {
     loading: loadingPhotos,
     filter,
   } = useSelector((state: RootState) => state.photos)
+  console.log(filter)
   const handlerAlert = (url: string, name: string) =>
     Alert.alert('Aviso', 'Deseja fazer download desta imagem?', [
       {
@@ -70,7 +71,7 @@ const Home = () => {
 
   useEffect(() => {
     getPhotos()
-  }, [])
+  }, [filter])
 
   const renderItem = ({ item }: Itens) => {
     return (

@@ -49,7 +49,7 @@ export function asyncSearchPhotos(payload: Filter) {
     dispatch(toggleLoading(true))
     try {
       const response = await searchPhotos(payload)
-      dispatch(setPhotos(response?.photos))
+      dispatch(setPhotos(response.photos.results))
     } catch (error) {
       console.log(error)
     } finally {

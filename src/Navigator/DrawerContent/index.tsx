@@ -21,12 +21,12 @@ import { FlashList } from '@shopify/flash-list'
 import { useDispatch, useSelector } from 'react-redux'
 import { setOptionFilter } from '@/Store/Photos/getPhotos'
 import { RootState } from '@/Store'
+import { DrawerActions, useNavigation } from '@react-navigation/native'
 
 const Drawer: React.FC<DrawerContentComponentProps> = () => {
   const [open, setOpen] = useState(false)
-  const [newQuery, setNewQuery] = useState([])
   const [optionFilterState, setOptionFilterState] = useState(OptionFilter)
-
+  const navigation = useNavigation()
   const dispatch = useDispatch()
   const { filter } = useSelector((state: RootState) => state.photos)
 
@@ -34,9 +34,28 @@ const Drawer: React.FC<DrawerContentComponentProps> = () => {
     const index = OptionFilter.findIndex(option => option.value === value)
     if (index !== -1) {
       const newOptionFilterState = [...OptionFilter]
-      newOptionFilterState[index].isActive = !newOptionFilterState[index].isActive
+      newOptionFilterState[index].isActive =
+        !newOptionFilterState[index].isActive
       setOptionFilterState(newOptionFilterState)
     }
+  }
+
+  const handlerFilter = () => {
+    const activeValues = optionFilterState
+      .filter(item => item.isActive)
+      .map(item => item.value)
+    const newQuery = filter.query
+      .concat(activeValues)
+      .filter((value, index, self) => {
+        return self.indexOf(value) === index
+      })
+    const newFilter = {
+      ...filter,
+      query: newQuery,
+    }
+    dispatch(setOptionFilter(newFilter))
+    navigation.dispatch(DrawerActions.closeDrawer())
+    setOpen(false)
   }
 
   const listCategoriesFilter = useCallback(() => {
@@ -48,16 +67,16 @@ const Drawer: React.FC<DrawerContentComponentProps> = () => {
           numColumns={2}
           renderItem={item => {
             return (
-                <Categories
-                  onPress={() => updateOptionFilterState(item.item.value)}
-                  style={{ borderColor: item.item.isActive ? '#0f0f' : '#fff' }}
-                >
-                  <TextCategories>{item.item.name}</TextCategories>
-                </Categories>
+              <Categories
+                onPress={() => updateOptionFilterState(item.item.value)}
+                style={{ borderColor: item.item.isActive ? '#0f0f' : '#fff' }}
+              >
+                <TextCategories>{item.item.name}</TextCategories>
+              </Categories>
             )
           }}
         />
-        <Button>
+        <Button onPress={() => handlerFilter()}>
           <TextButton>Filtrar</TextButton>
         </Button>
       </>
@@ -74,6 +93,7 @@ const Drawer: React.FC<DrawerContentComponentProps> = () => {
     >
       <Container>
         <Logo source={image} />
+        {/*
         <Item>
           <Content onPress={() => setOpen(!open)}>
             <Title>CATEGORIAS</Title>
@@ -89,6 +109,7 @@ const Drawer: React.FC<DrawerContentComponentProps> = () => {
           </Content>
           {open && listCategoriesFilter()}
         </Item>
+        */}
         <Item>
           <Content onPress={() => {}}>
             <Title>FAVORITOS</Title>

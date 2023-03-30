@@ -20,7 +20,7 @@ const Header = () => {
       ...filter,
       query: search,
     }
-    setOptionFilter(newFilter)
+    dispatch(setOptionFilter(newFilter))
     dispatch(asyncSearchPhotos(newFilter))
   }
 
@@ -30,7 +30,10 @@ const Header = () => {
   return (
     <>
       <Container>
-        <TouchableOpacity activeOpacity={0.6} onPress={() => handleOpenDrawer()}>
+        <TouchableOpacity
+          activeOpacity={0.6}
+          onPress={() => handleOpenDrawer()}
+        >
           <List color="#fff" size={41} style={{ right: 42 }} />
         </TouchableOpacity>
         <InputSearch
