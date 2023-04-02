@@ -1,34 +1,65 @@
-import React, { useCallback, useState } from 'react'
-import { useEffect } from 'react'
-import { Platform, Alert, FlatList } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Platform, Alert } from 'react-native'
 import { Author, Content, ContentLoading, ImageBackground } from './styles'
 import { UnsplashImage } from '@/Services/Types/Photos'
-import { Buttons, Header } from '@/Components'
-import LoadingImage from '@/Components/LoadingImage'
+import { Buttons, Header, LoadingImage } from '@/Components'
 import RNFetchBlob from 'rn-fetch-blob'
-import { useDispatch, useSelector } from 'react-redux'
-import {
-  asyncGetPhotos,
-  asyncSearchPhotos,
-  setOptionFilter,
-} from '@/Store/Photos/getPhotos'
-import { RootState } from '@/Store'
 import Loading from 'react-native-spinkit'
 import { FlashList } from '@shopify/flash-list'
+import { getPhotos, searchPhotos } from '@/Services/Photos/getPhotos'
+import { DefaultFilter } from '@/Constants/OptionFilter'
+import { Filter } from '@/Services/Types/Filters'
 interface Itens {
   item: UnsplashImage
 }
 const Home = () => {
-  const dispatch = useDispatch()
-  const [loading, setLoading] = useState(false)
-  const [selectedItemId, setSelectedItemId] = useState(null);
+  const [photos, setPhotos] = useState<UnsplashImage[]>([])
+  const [filter, setFilter] = useState<Filter>(DefaultFilter)
+  const [loading, setLoading] = useState<boolean>(false)
+  const [loadingImage, setLoadingImage] = useState<boolean>(false)
 
-  const {
-    photos,
-    loading: loadingPhotos,
-    filter,
-  } = useSelector((state: RootState) => state.photos)
-  console.log(filter)
+  useEffect(() => {
+    async function loadFotos() {
+      setLoading(true)
+      const response = await getPhotos(filter).finally(() => {
+        setLoading(false)
+      })
+      !!response && setPhotos(response)
+    }
+    loadFotos()
+  }, [])
+
+  const addPhotos = async (filter: Filter) => {
+    setLoading(true)
+    await getPhotos(filter)
+      .then(response => {
+        if (filter.page === 1) {
+          !!response && setPhotos(response)
+        } else {
+          const newPhotos = [...photos, ...response]
+          setPhotos(newPhotos)
+        }
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }
+
+  const SearchPhotos = async (query: string) => {
+    const newFilter = {
+      page: 1,
+      query,
+    }
+    setFilter(newFilter)
+    await searchPhotos(newFilter).then(response => {
+      !!response && setPhotos(response.photos.results)
+    })
+  }
+
+  const updateFilter = (filter: Filter) => {
+    setFilter(filter)
+  }
+
   const handlerAlert = (url: string, name: string) =>
     Alert.alert('Aviso', 'Deseja fazer download desta imagem?', [
       {
@@ -67,40 +98,19 @@ const Home = () => {
         toast?.show('Download realizado com sucesso!', {
           type: 'success',
         })
-        console.log('The file saved to ', res.path())
       })
   }
 
   const shareImage = () => {}
 
-  console.log(photos.length)
   const handlerMorePhotos = () => {
     const newFilter = {
       ...filter,
       page: filter.page + 1,
     }
-    dispatch(setOptionFilter(newFilter))
-    if (filter.query) {
-      dispatch(asyncSearchPhotos(newFilter))
-    } else {
-      dispatch(asyncGetPhotos(newFilter))
-    }
+    updateFilter(newFilter)
+    addPhotos(newFilter)
   }
-
-  const getPhotos = useCallback(() => {
-    const newFilter = {
-      ...filter,
-      page: 1
-    }
-    filter.query
-      ? dispatch(asyncSearchPhotos(newFilter))
-      : dispatch(asyncGetPhotos(newFilter))
-    
-  }, [filter.query])
-
-  useEffect(() => {
-    getPhotos()
-  }, [filter])
 
   const renderItem = ({ item }: Itens) => {
     return (
@@ -109,12 +119,12 @@ const Home = () => {
           uri: item.urls.regular,
           priority: 'high',
         }}
-        onLoadStart={() => setLoading(true)}
-        onLoadEnd={() => setLoading(false)}
+        onLoadStart={() => setLoadingImage(true)}
+        onLoadEnd={() => setLoadingImage(false)}
         resizeMode={'cover'}
       >
-        <Header />
-        {loading && (
+        <Header searchImages={query => SearchPhotos(query)} />
+        {loadingImage && (
           <ContentLoading>
             <Loading type="9CubeGrid" size={42} color={'#fff'} />
           </ContentLoading>
@@ -132,19 +142,19 @@ const Home = () => {
     )
   }
 
-  if (loadingPhotos) {
+  if (loading) {
     return <LoadingImage />
   }
 
   return (
     photos && (
-      <FlatList
+      <FlashList
         data={photos}
         keyExtractor={item => String(item.id)}
         renderItem={renderItem}
         pagingEnabled
         onEndReached={handlerMorePhotos}
-        onEndReachedThreshold={0.2}
+        onEndReachedThreshold={0.1}
         showsVerticalScrollIndicator={false}
       />
     )

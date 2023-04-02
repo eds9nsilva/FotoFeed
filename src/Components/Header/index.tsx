@@ -1,32 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { ButtonSearch, Container, InputSearch } from './styles'
 import { MagnifyingGlass, List } from 'phosphor-react-native'
-import { Platform, TouchableOpacity } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
-import { asyncSearchPhotos, setOptionFilter } from '@/Store/Photos/getPhotos'
-import { RootState } from '@/Store'
+import { TouchableOpacity } from 'react-native'
 import { DrawerActions, useNavigation } from '@react-navigation/native'
+interface Props {
+  searchImages: (query: string) => void
+}
 
-const Header = () => {
-  const dispatch = useDispatch()
+const Header = ({ searchImages }: Props) => {
   const [search, setSearch] = useState('')
   const navigation = useNavigation()
-
-  const { filter } = useSelector((state: RootState) => state.photos)
-
-  useEffect(() => {
-    filter.query && setSearch(filter.query)
-  }, [filter.query])
-
-  const searchImages = async () => {
-    if (search.length < 1) return
-    const newFilter = {
-      ...filter,
-      query: search,
-    }
-    dispatch(setOptionFilter(newFilter))
-    dispatch(asyncSearchPhotos(newFilter))
-  }
 
   const handleOpenDrawer = () => {
     navigation.dispatch(DrawerActions.openDrawer())
@@ -45,11 +28,11 @@ const Header = () => {
           placeholderTextColor={'#fff'}
           value={search}
           onSubmitEditing={() => {
-            searchImages()
+            searchImages(search)
           }}
           onChangeText={value => setSearch(value)}
         />
-        <ButtonSearch activeOpacity={0.6} onPress={() => searchImages()}>
+        <ButtonSearch activeOpacity={0.6} onPress={() => searchImages(search)}>
           <MagnifyingGlass size={22} color={'#fff'} />
         </ButtonSearch>
       </Container>
