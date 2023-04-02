@@ -20,8 +20,5 @@ export const OptionFilter = [
 
 export const DefaultFilter: Filter = {
   page: 1,
-  per_page: 80,
   query: undefined,
-  next_page: '',
-  prev_page: '',
 }
