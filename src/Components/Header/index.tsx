@@ -5,9 +5,10 @@ import { TouchableOpacity } from 'react-native'
 import { DrawerActions, useNavigation } from '@react-navigation/native'
 interface Props {
   searchImages: (query: string) => void
+  valueSearch: string | undefined
 }
 
-const Header = ({ searchImages }: Props) => {
+const Header = ({ searchImages, valueSearch }: Props) => {
   const [search, setSearch] = useState('')
   const navigation = useNavigation()
 
@@ -26,7 +27,7 @@ const Header = ({ searchImages }: Props) => {
         <InputSearch
           placeholder="Pesquisar imagem"
           placeholderTextColor={'#fff'}
-          value={search}
+          value={valueSearch ? valueSearch : search}
           onSubmitEditing={() => {
             searchImages(search)
           }}

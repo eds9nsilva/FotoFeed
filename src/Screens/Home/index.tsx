@@ -27,7 +27,7 @@ const Home = () => {
       !!response && setPhotos(response)
     }
     loadFotos()
-  }, [])
+  })
 
   const addPhotos = async (filter: Filter) => {
     setLoading(true)
@@ -47,12 +47,16 @@ const Home = () => {
 
   const SearchPhotos = async (query: string) => {
     const newFilter = {
-      page: 1,
+      page: filter.query ? filter.page + 1 : 1,
       query,
     }
-    setFilter(newFilter)
+    updateFilter(newFilter)
     await searchPhotos(newFilter).then(response => {
-      !!response && setPhotos(response.photos.results)
+      if (newFilter.page === 1) {
+        setPhotos(response.photos.results)
+      } else {
+        setPhotos([...photos, response.photos.results])
+      }
     })
   }
 
@@ -109,21 +113,28 @@ const Home = () => {
       page: filter.page + 1,
     }
     updateFilter(newFilter)
-    addPhotos(newFilter)
+    if (newFilter.query) {
+      SearchPhotos(newFilter.query)
+    } else {
+      addPhotos(newFilter)
+    }
   }
 
   const renderItem = ({ item }: Itens) => {
     return (
       <ImageBackground
         source={{
-          uri: item.urls.regular,
+          uri: item.urls.regular ? item.urls.regular : item.urls.small,
           priority: 'high',
         }}
         onLoadStart={() => setLoadingImage(true)}
         onLoadEnd={() => setLoadingImage(false)}
         resizeMode={'cover'}
       >
-        <Header searchImages={query => SearchPhotos(query)} />
+        <Header
+          valueSearch={filter.query}
+          searchImages={query => SearchPhotos(query)}
+        />
         {loadingImage && (
           <ContentLoading>
             <Loading type="9CubeGrid" size={42} color={'#fff'} />
@@ -132,8 +143,12 @@ const Home = () => {
         <Buttons
           share={() => shareImage()}
           download={() =>
-            handlerAlert(item.urls.regular, `Photo-by ${item.user.username}`)
+            handlerAlert(
+              item.urls.regular ? item.urls.regular : item.urls.small,
+              `Photo-by ${item.user.username}`,
+            )
           }
+          save={() => {}}
         />
         <Content>
           <Author>Fotografo(a): {item.user.username}</Author>
@@ -154,7 +169,7 @@ const Home = () => {
         renderItem={renderItem}
         pagingEnabled
         onEndReached={handlerMorePhotos}
-        onEndReachedThreshold={0.1}
+        onEndReachedThreshold={0.2}
         showsVerticalScrollIndicator={false}
       />
     )
