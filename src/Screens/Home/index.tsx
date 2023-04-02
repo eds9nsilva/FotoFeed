@@ -1,12 +1,11 @@
-import React, { useCallback, useState } from 'react'
-import { useEffect } from 'react'
+import React, { useContext, useState } from 'react'
 import { Platform, Alert, FlatList } from 'react-native'
 import { Author, Content, ContentLoading, ImageBackground } from './styles'
 import { UnsplashImage } from '@/Services/Types/Photos'
 import { Buttons, Header } from '@/Components'
 import LoadingImage from '@/Components/LoadingImage'
 import RNFetchBlob from 'rn-fetch-blob'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import {
   asyncGetPhotos,
   asyncSearchPhotos,
@@ -15,20 +14,17 @@ import {
 import { RootState } from '@/Store'
 import Loading from 'react-native-spinkit'
 import { FlashList } from '@shopify/flash-list'
+import { PhotosContext } from '@/Context/PhotosContext'
 interface Itens {
   item: UnsplashImage
 }
 const Home = () => {
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(false)
-  const [selectedItemId, setSelectedItemId] = useState(null);
-
-  const {
-    photos,
-    loading: loadingPhotos,
-    filter,
-  } = useSelector((state: RootState) => state.photos)
+  const {photos, filter, loading: loadingPhotos} = useContext(PhotosContext)
+  
   console.log(filter)
+
   const handlerAlert = (url: string, name: string) =>
     Alert.alert('Aviso', 'Deseja fazer download desta imagem?', [
       {
@@ -73,35 +69,11 @@ const Home = () => {
 
   const shareImage = () => {}
 
-  console.log(photos.length)
+
   const handlerMorePhotos = () => {
-    const newFilter = {
-      ...filter,
-      page: filter.page + 1,
-    }
-    dispatch(setOptionFilter(newFilter))
-    if (filter.query) {
-      dispatch(asyncSearchPhotos(newFilter))
-    } else {
-      dispatch(asyncGetPhotos(newFilter))
-    }
+
   }
-
-  const getPhotos = useCallback(() => {
-    const newFilter = {
-      ...filter,
-      page: 1
-    }
-    filter.query
-      ? dispatch(asyncSearchPhotos(newFilter))
-      : dispatch(asyncGetPhotos(newFilter))
-    
-  }, [filter.query])
-
-  useEffect(() => {
-    getPhotos()
-  }, [filter])
-
+  
   const renderItem = ({ item }: Itens) => {
     return (
       <ImageBackground
