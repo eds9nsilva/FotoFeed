@@ -98,7 +98,7 @@ const Home = () => {
       path: imagePath,
     })
       .fetch('GET', url)
-      .then(res => {
+      .then(() => {
         toast?.show('Download realizado com sucesso!', {
           type: 'success',
         })
