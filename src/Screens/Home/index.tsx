@@ -27,7 +27,7 @@ const Home = () => {
       !!response && setPhotos(response)
     }
     loadFotos()
-  })
+  }, [])
 
   const addPhotos = async (filter: Filter) => {
     setLoading(true)
@@ -105,8 +105,6 @@ const Home = () => {
       })
   }
 
-  const shareImage = () => {}
-
   const handlerMorePhotos = () => {
     const newFilter = {
       ...filter,
@@ -124,8 +122,7 @@ const Home = () => {
     return (
       <ImageBackground
         source={{
-          uri: item.urls.regular ? item.urls.regular : item.urls.small,
-          priority: 'high',
+          uri: item.urls?.regular ? item.urls?.regular : item.urls?.small,
         }}
         onLoadStart={() => setLoadingImage(true)}
         onLoadEnd={() => setLoadingImage(false)}
@@ -141,31 +138,27 @@ const Home = () => {
           </ContentLoading>
         )}
         <Buttons
-          share={() => shareImage()}
           download={() =>
             handlerAlert(
-              item.urls.regular ? item.urls.regular : item.urls.small,
-              `Photo-by ${item.user.username}`,
+              item.urls?.regular ? item.urls?.regular : item.urls?.small,
+              `Photo-by ${item.user?.username}`,
             )
           }
           save={() => {}}
         />
         <Content>
-          <Author>Fotografo(a): {item.user.username}</Author>
+          <Author>Fotografo(a): {item.user?.username}</Author>
         </Content>
       </ImageBackground>
     )
   }
 
-  if (loading) {
-    return <LoadingImage />
-  }
 
   return (
     photos && (
       <FlashList
         data={photos}
-        keyExtractor={item => String(item.id)}
+        keyExtractor={(item) => String(item.id)}
         renderItem={renderItem}
         pagingEnabled
         onEndReached={handlerMorePhotos}

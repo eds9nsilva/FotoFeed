@@ -4,7 +4,7 @@ import { Dimensions } from 'react-native'
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
-export const ImageBackground = styled(FastImage)`
+export const ImageBackground = styled.ImageBackground`
   width: ${width}px;
   height: ${height}px;
   flex: 1;
