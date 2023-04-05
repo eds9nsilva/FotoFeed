@@ -12,7 +12,7 @@ export const ImageBackground = styled.ImageBackground`
 
 export const Content = styled.View`
   position: absolute;
-  bottom: 20px;
+  bottom: 8%;
   left: 20px;
 `
 

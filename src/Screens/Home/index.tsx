@@ -1,69 +1,19 @@
-import React, { useEffect, useState } from 'react'
-import { Platform, Alert, Dimensions, SafeAreaView } from 'react-native'
+import React, { useContext, useState } from 'react'
+import { Platform, Alert, Dimensions } from 'react-native'
 import { Author, Content, ContentLoading, ImageBackground } from './styles'
 import { UnsplashImage } from '@/Services/Types/Photos'
-import { Buttons, Header, LoadingImage } from '@/Components'
+import { Buttons, Header } from '@/Components'
 import RNFetchBlob from 'rn-fetch-blob'
 import Loading from 'react-native-spinkit'
 import { FlashList } from '@shopify/flash-list'
-import { getPhotos, searchPhotos } from '@/Services/Photos/getPhotos'
-import { DefaultFilter } from '@/Constants/OptionFilter'
-import { Filter } from '@/Services/Types/Filters'
+import { PhotosContext } from '@/Context/PhotosContext'
 interface Itens {
   item: UnsplashImage
 }
 const Home = () => {
-  const [photos, setPhotos] = useState<UnsplashImage[]>([])
-  const [filter, setFilter] = useState<Filter>(DefaultFilter)
-  const [loading, setLoading] = useState<boolean>(false)
   const [loadingImage, setLoadingImage] = useState<boolean>(false)
   const height = Dimensions.get('window').height
-
-  useEffect(() => {
-    async function loadFotos() {
-      setLoading(true)
-      const response = await getPhotos(filter).finally(() => {
-        setLoading(false)
-      })
-      !!response && setPhotos(response)
-    }
-    loadFotos()
-  }, [])
-
-  const addPhotos = async (filter: Filter) => {
-    setLoading(true)
-    await getPhotos(filter)
-      .then(response => {
-        if (filter.page === 1) {
-          !!response && setPhotos(response)
-        } else {
-          const newPhotos = [...photos, ...response]
-          setPhotos(newPhotos)
-        }
-      })
-      .finally(() => {
-        setLoading(false)
-      })
-  }
-
-  const SearchPhotos = async (query: string) => {
-    const newFilter = {
-      page: filter.query ? filter.page + 1 : 1,
-      query,
-    }
-    updateFilter(newFilter)
-    await searchPhotos(newFilter).then(response => {
-      if (newFilter.page === 1) {
-        setPhotos(response.photos.results)
-      } else {
-        setPhotos([...photos, response.photos.results])
-      }
-    })
-  }
-
-  const updateFilter = (filter: Filter) => {
-    setFilter(filter)
-  }
+  const {photos, filter, SearchPhotos, handlerMorePhotos} = useContext(PhotosContext)
 
   const handlerAlert = (url: string, name: string) =>
     Alert.alert('Aviso', 'Deseja fazer download desta imagem?', [
@@ -106,23 +56,9 @@ const Home = () => {
       })
   }
 
-  const handlerMorePhotos = () => {
-    const newFilter = {
-      ...filter,
-      page: filter.page + 1,
-    }
-    updateFilter(newFilter)
-    if (newFilter.query) {
-      SearchPhotos(newFilter.query)
-    } else {
-      addPhotos(newFilter)
-    }
-  }
-
   const renderItem = ({ item }: Itens) => {
     return (
       <>
-        <SafeAreaView />
         <ImageBackground
           source={{
             uri: item.urls?.regular ? item.urls?.regular : item.urls?.small,

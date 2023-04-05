@@ -11,7 +11,7 @@ const ApplicationNavigator = () => {
   return (
     <NavigationContainer ref={navigationRef}>
       <StatusBar
-        backgroundColor="transparent"
+        backgroundColor="#181a20"
         barStyle={'light-content'}
       />
       <Stack.Navigator

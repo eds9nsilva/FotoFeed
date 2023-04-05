@@ -3,7 +3,7 @@ import styled from 'styled-components/native'
 export const Container = styled.KeyboardAvoidingView`
   flex-direction: row;
   align-items: center;
-  padding-top: 13%;
+  padding-top: 10%;
 `
 
 export const InputSearch = styled.TextInput`
