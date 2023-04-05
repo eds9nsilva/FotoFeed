@@ -13,7 +13,6 @@ const ApplicationNavigator = () => {
       <StatusBar
         backgroundColor="transparent"
         barStyle={'light-content'}
-        translucent
       />
       <Stack.Navigator
         detachInactiveScreens={false}

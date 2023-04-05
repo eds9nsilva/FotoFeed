@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Platform, Alert, Dimensions } from 'react-native'
+import { Platform, Alert, Dimensions, SafeAreaView } from 'react-native'
 import { Author, Content, ContentLoading, ImageBackground } from './styles'
 import { UnsplashImage } from '@/Services/Types/Photos'
 import { Buttons, Header, LoadingImage } from '@/Components'
@@ -17,7 +17,7 @@ const Home = () => {
   const [filter, setFilter] = useState<Filter>(DefaultFilter)
   const [loading, setLoading] = useState<boolean>(false)
   const [loadingImage, setLoadingImage] = useState<boolean>(false)
-  const height = Dimensions.get('window').height;
+  const height = Dimensions.get('window').height
 
   useEffect(() => {
     async function loadFotos() {
@@ -121,50 +121,52 @@ const Home = () => {
 
   const renderItem = ({ item }: Itens) => {
     return (
-      <ImageBackground
-        source={{
-          uri: item.urls?.regular ? item.urls?.regular : item.urls?.small,
-        }}
-        onLoadStart={() => setLoadingImage(true)}
-        onLoadEnd={() => setLoadingImage(false)}
-        resizeMode={'cover'}
-      >
-        <Header
-          valueSearch={filter.query}
-          searchImages={query => SearchPhotos(query)}
-        />
-        {loadingImage && (
-          <ContentLoading>
-            <Loading type="9CubeGrid" size={42} color={'#fff'} />
-          </ContentLoading>
-        )}
-        <Buttons
-          download={() =>
-            handlerAlert(
-              item.urls?.regular ? item.urls?.regular : item.urls?.small,
-              `Photo-by ${item.user?.username}`,
-            )
-          }
-          save={() => {}}
-        />
-        <Content>
-          <Author>Fotografo(a): {item.user?.username}</Author>
-        </Content>
-      </ImageBackground>
+      <>
+        <SafeAreaView />
+        <ImageBackground
+          source={{
+            uri: item.urls?.regular ? item.urls?.regular : item.urls?.small,
+          }}
+          onLoadStart={() => setLoadingImage(true)}
+          onLoadEnd={() => setLoadingImage(false)}
+          resizeMode={'cover'}
+        >
+          <Header
+            valueSearch={filter.query}
+            searchImages={query => SearchPhotos(query)}
+          />
+          {loadingImage && (
+            <ContentLoading>
+              <Loading type="9CubeGrid" size={42} color={'#fff'} />
+            </ContentLoading>
+          )}
+          <Buttons
+            download={() =>
+              handlerAlert(
+                item.urls?.regular ? item.urls?.regular : item.urls?.small,
+                `Photo-by ${item.user?.username}`,
+              )
+            }
+            save={() => {}}
+          />
+          <Content>
+            <Author>Fotografo(a): {item.user?.username}</Author>
+          </Content>
+        </ImageBackground>
+      </>
     )
   }
-
 
   return (
     photos && (
       <FlashList
         data={photos}
-        keyExtractor={(item) => String(item.id)}
+        keyExtractor={item => String(item.id)}
         renderItem={renderItem}
         pagingEnabled
         decelerationRate="fast"
         snapToInterval={height}
-        viewabilityConfig={{itemVisiblePercentThreshold: 90}}
+        viewabilityConfig={{ itemVisiblePercentThreshold: 90 }}
         onEndReached={handlerMorePhotos}
         onEndReachedThreshold={0.2}
         showsVerticalScrollIndicator={false}
