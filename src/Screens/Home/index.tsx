@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Platform, Alert } from 'react-native'
+import { Platform, Alert, Dimensions } from 'react-native'
 import { Author, Content, ContentLoading, ImageBackground } from './styles'
 import { UnsplashImage } from '@/Services/Types/Photos'
 import { Buttons, Header, LoadingImage } from '@/Components'
@@ -17,6 +17,7 @@ const Home = () => {
   const [filter, setFilter] = useState<Filter>(DefaultFilter)
   const [loading, setLoading] = useState<boolean>(false)
   const [loadingImage, setLoadingImage] = useState<boolean>(false)
+  const height = Dimensions.get('window').height;
 
   useEffect(() => {
     async function loadFotos() {
@@ -161,6 +162,9 @@ const Home = () => {
         keyExtractor={(item) => String(item.id)}
         renderItem={renderItem}
         pagingEnabled
+        decelerationRate="fast"
+        snapToInterval={height}
+        viewabilityConfig={{itemVisiblePercentThreshold: 90}}
         onEndReached={handlerMorePhotos}
         onEndReachedThreshold={0.2}
         showsVerticalScrollIndicator={false}
