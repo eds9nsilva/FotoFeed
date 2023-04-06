@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import DrawerContainer from './DrawerStack'
 import { PhotosProvider } from '@/Context/PhotosContext'
@@ -6,26 +6,32 @@ import { useNetInfo } from '@react-native-community/netinfo'
 import { Network } from '@/Screens'
 
 const Stack = createStackNavigator()
+const StackNetwork = createStackNavigator()
 
 const StackNavigator = () => {
   const netInfo = useNetInfo()
+  const [isConnected, setIsConnected] = useState(netInfo.isConnected)
 
-  const checkNetwork = useMemo(() => {
-    return netInfo.isConnected
-  }, [netInfo.isConnected])
+  useEffect(() => {
+    setIsConnected(netInfo.isConnected)
+  }, [netInfo])
 
-
-  return (
+  return isConnected ? (
     <PhotosProvider>
       <Stack.Navigator
         detachInactiveScreens={false}
         screenOptions={{ headerShown: false }}
-        initialRouteName={checkNetwork ? "Main" : "Network"}
       >
         <Stack.Screen name="Main" component={DrawerContainer} />
-        <Stack.Screen name="Network" component={Network} />
       </Stack.Navigator>
     </PhotosProvider>
+  ) : (
+    <Stack.Navigator
+      detachInactiveScreens={false}
+      screenOptions={{ headerShown: false }}
+    >
+      <Stack.Screen name="Network" component={Network} />
+    </Stack.Navigator>
   )
 }
 
