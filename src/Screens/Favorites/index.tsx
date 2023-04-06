@@ -1,12 +1,14 @@
-import React from 'react'
-import { Container } from './styles';
+import { FavoriteContext } from '@/Context/FavoritesContext'
+import React, { useContext } from 'react'
+import { FlatList } from 'react-native'
+import { Card } from './Component/Card'
+import { Container } from './styles'
 
 const Favorites = () => {
-    return (
-        <Container>
-            
-        </Container>
-    )
+  const {favorites} = useContext(FavoriteContext)
+
+  console.log('FAVORITOS: ' , favorites.length)
+  return <Container></Container>
 }
 
-export default Favorites;
+export default Favorites

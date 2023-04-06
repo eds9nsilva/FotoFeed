@@ -7,13 +7,17 @@ import RNFetchBlob from 'rn-fetch-blob'
 import Loading from 'react-native-spinkit'
 import { FlashList } from '@shopify/flash-list'
 import { PhotosContext } from '@/Context/PhotosContext'
+import { FavoriteContext } from '@/Context/FavoritesContext'
 interface Itens {
   item: UnsplashImage
 }
 const Home = () => {
   const [loadingImage, setLoadingImage] = useState<boolean>(false)
   const height = Dimensions.get('window').height
-  const {photos, filter, SearchPhotos, handlerMorePhotos} = useContext(PhotosContext)
+  const { photos, filter, SearchPhotos, handlerMorePhotos } =
+    useContext(PhotosContext)
+  const { addFavorites, removeFavorites, favorites } =
+    useContext(FavoriteContext)
 
   const handlerAlert = (url: string, name: string) =>
     Alert.alert('Aviso', 'Deseja fazer download desta imagem?', [
@@ -56,6 +60,20 @@ const Home = () => {
       })
   }
 
+  const handlerFavorite = (image: UnsplashImage) => {
+    const isFavorite = favorites.find(item => {
+      return item.id === image.id
+    })
+    console.log(isFavorite)
+    if (!!isFavorite) {
+      console.log('ENTROU no add')
+      addFavorites(image)
+    } else {
+      console.log('ENTROU no remove')
+      removeFavorites(image.id)
+    }
+  }
+
   const renderItem = ({ item }: Itens) => {
     return (
       <>
@@ -83,7 +101,7 @@ const Home = () => {
                 `Photo-by ${item.user?.username}`,
               )
             }
-            save={() => {}}
+            save={() => handlerFavorite(item)}
           />
           <Content>
             <Author>Fotografo(a): {item.user?.username}</Author>
