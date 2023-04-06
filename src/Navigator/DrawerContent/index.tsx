@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React from 'react'
 import {
   DrawerContentScrollView,
   DrawerContentComponentProps,
@@ -15,23 +15,13 @@ import {
   TextButton,
 } from './styles'
 import image from '@/Asserts/logo.png'
-import { DefaultFilter, OptionFilter } from '@/Constants/OptionFilter'
-import { FlashList } from '@shopify/flash-list'
-import { DrawerActions, useNavigation } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 
 const Drawer: React.FC<DrawerContentComponentProps> = () => {
-  const [open, setOpen] = useState(false)
-  const [optionFilterState, setOptionFilterState] = useState(OptionFilter)
-  const navigation = useNavigation()
+  const { navigate } = useNavigation()
 
-  const updateOptionFilterState = (value: string) => {
-    const index = OptionFilter.findIndex(option => option.value === value)
-    if (index !== -1) {
-      const newOptionFilterState = [...OptionFilter]
-      newOptionFilterState[index].isActive =
-        !newOptionFilterState[index].isActive
-      setOptionFilterState(newOptionFilterState)
-    }
+  const handleFavorites = () => {
+    navigate('Favorites', {})
   }
 
   return (
@@ -45,7 +35,7 @@ const Drawer: React.FC<DrawerContentComponentProps> = () => {
       <Container>
         <Logo source={image} />
         <Item>
-          <Content onPress={() => {}}>
+          <Content onPress={() => handleFavorites()}>
             <Title>FAVORITOS</Title>
           </Content>
         </Item>
