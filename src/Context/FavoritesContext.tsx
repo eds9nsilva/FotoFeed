@@ -34,23 +34,15 @@ export const FavoriteProvider: React.FunctionComponent<IProps> = ({
   }, [])
 
   const addFavorites = async (image: UnsplashImage) => {
-    try {
-      const newFavoritesList = [...favorites, image]
-      console.log('CHAMOU addFavorites')
-      console.log('NO CONTEXT: ',  newFavoritesList.length)
-      setFavorites(newFavoritesList)
-      await AsyncStorage.setItem(
-        favoritesData,
-        JSON.stringify(newFavoritesList),
-      )
-    } catch (error) {
-      throw new Error(error as string)
-    }
+    const newFavoritesList = favorites.concat(image)
+    console.log(newFavoritesList.length)
+    setFavorites(newFavoritesList)
+    await AsyncStorage.setItem(favoritesData, JSON.stringify(newFavoritesList))
   }
 
-  const removeFavorites = async (id: string) => {
+  const removeFavorites = async (favoriteId: string) => {
     try {
-      const newFavoritesList = favorites.filter(item => item.id !== id);
+      const newFavoritesList = favorites.filter(item => item.id !== favoriteId)
       setFavorites(newFavoritesList)
       await AsyncStorage.setItem(
         favoritesData,

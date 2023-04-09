@@ -64,13 +64,13 @@ const Home = () => {
     const isFavorite = favorites.find(item => {
       return item.id === image.id
     })
-    console.log(isFavorite)
-    if (!!isFavorite) {
-      console.log('ENTROU no add')
-      addFavorites(image)
-    } else {
+    console.log(isFavorite?.id)
+    if (isFavorite) {
       console.log('ENTROU no remove')
       removeFavorites(image.id)
+    } else {
+      console.log('ENTROU no add')
+      addFavorites(image)
     }
   }
 

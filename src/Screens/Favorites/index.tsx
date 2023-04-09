@@ -5,10 +5,19 @@ import { Card } from './Component/Card'
 import { Container } from './styles'
 
 const Favorites = () => {
-  const {favorites} = useContext(FavoriteContext)
+  const { favorites } = useContext(FavoriteContext)
 
-  console.log('FAVORITOS: ' , favorites.length)
-  return <Container></Container>
+  console.log('FAVORITOS: ', favorites.length)
+  return (
+    <Container>
+      <FlatList
+        data={favorites}
+        keyExtractor={item => item.id}
+        numColumns={2}
+        renderItem={({ item }) => <Card imageUrl={item.urls.small} />}
+      />
+    </Container>
+  )
 }
 
 export default Favorites

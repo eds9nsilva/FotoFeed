@@ -10,7 +10,7 @@ const Stack = createStackNavigator()
 
 const StackNavigator = () => {
   const netInfo = useNetInfo()
-  const [isConnected, setIsConnected] = useState(netInfo.isConnected)
+  const [isConnected, setIsConnected] = useState<boolean | null>(true)
 
   useEffect(() => {
     setIsConnected(netInfo.isConnected)
