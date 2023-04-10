@@ -16,7 +16,7 @@ const Home = () => {
   const height = Dimensions.get('window').height
   const { photos, filter, SearchPhotos, handlerMorePhotos } =
     useContext(PhotosContext)
-  const { handlerFavorite, favorites } = useContext(FavoriteContext)
+  const { handlerFavorite, favorites, checkIsFavorite } = useContext(FavoriteContext)
 
   const handlerAlert = (url: string, name: string) =>
     Alert.alert('Aviso', 'Deseja fazer download desta imagem?', [
@@ -59,10 +59,6 @@ const Home = () => {
       })
   }
 
-  const checkIsFavorite = useCallback((id: string) => {
-    const isFavorite = favorites.find(item => item.id == id)
-    return !!isFavorite
-  }, [favorites])
 
 
   const renderItem = ({ item }: Itens) => {

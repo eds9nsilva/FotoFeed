@@ -1,10 +1,11 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React, { createContext, useCallback, useContext, useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { UnsplashImage } from '@/Services/Types/Photos'
 
 interface IFavoriteContext {
   favorites: UnsplashImage[]
   handlerFavorite: (image: UnsplashImage) => void
+  checkIsFavorite: (id: string) => boolean
 }
 
 interface IProps {
@@ -50,11 +51,18 @@ export const FavoriteProvider: React.FunctionComponent<IProps> = ({
     isFavorite ? removeFavorites(image.id) : addFavorites(image)
   }
 
+  const checkIsFavorite = useCallback((id: string) => {
+    const isFavorite = favorites.find(item => item.id == id)
+    return !!isFavorite
+  }, [favorites])
+
+
   return (
     <FavoriteContext.Provider
       value={{
         favorites,
         handlerFavorite,
+        checkIsFavorite,
       }}
     >
       {children}

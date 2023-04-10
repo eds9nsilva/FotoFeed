@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import DrawerContainer from './DrawerStack'
 import { PhotosProvider } from '@/Context/PhotosContext'
 import { useNetInfo } from '@react-native-community/netinfo'
-import { Favorites, Network } from '@/Screens'
+import { DetailsFavorite, Favorites, Network } from '@/Screens'
 import { FavoriteProvider } from '@/Context/FavoritesContext'
 
 const Stack = createStackNavigator()
@@ -36,6 +36,7 @@ const StackNavigator = () => {
               headerTitle: 'Favoritos',
             }}
           />
+          <Stack.Screen name="DetailsFavorite" component={DetailsFavorite} />
         </Stack.Navigator>
       </FavoriteProvider>
     </PhotosProvider>

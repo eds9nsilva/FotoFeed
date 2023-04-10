@@ -1,13 +1,26 @@
 import React from 'react'
-import { Image } from './styles'
+import { UnsplashImage } from '@/Services/Types/Photos'
+import { useNavigation } from '@react-navigation/native'
+import { Image, Container } from './styles'
 
 interface Props {
-  imageUrl: string
+  image: UnsplashImage
 }
 
-export const Card = ({imageUrl}: Props) => {
-  
-  return ( 
-    <Image source={{uri: imageUrl}}/> 
+export const Card = ({ image }: Props) => {
+  const { navigate } = useNavigation()
+
+  const handlerOpenDetails = () => {
+    navigate('DetailsFavorite', image)
+  }
+
+  return (
+    <Container onPress={() => handlerOpenDetails()}>
+      <Image
+        source={{
+          uri: image.urls.small ? image.urls.small : image.urls.regular,
+        }}
+      />
+    </Container>
   )
 }
