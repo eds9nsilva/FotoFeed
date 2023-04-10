@@ -4,8 +4,7 @@ import { UnsplashImage } from '@/Services/Types/Photos'
 
 interface IFavoriteContext {
   favorites: UnsplashImage[]
-  addFavorites: (image: UnsplashImage) => void
-  removeFavorites: (id: string) => void
+  handlerFavorite: (image: UnsplashImage) => void
 }
 
 interface IProps {
@@ -22,7 +21,6 @@ export const FavoriteProvider: React.FunctionComponent<IProps> = ({
   children,
 }) => {
   const [favorites, setFavorites] = useState<UnsplashImage[]>([])
-
   useEffect(() => {
     async function loadFavorites() {
       const favoritesList = await AsyncStorage.getItem(favoritesData)
@@ -34,31 +32,29 @@ export const FavoriteProvider: React.FunctionComponent<IProps> = ({
   }, [])
 
   const addFavorites = async (image: UnsplashImage) => {
-    const newFavoritesList = favorites.concat(image)
-    console.log(newFavoritesList.length)
+    const newFavoritesList = [...favorites, image]
     setFavorites(newFavoritesList)
     await AsyncStorage.setItem(favoritesData, JSON.stringify(newFavoritesList))
   }
 
   const removeFavorites = async (favoriteId: string) => {
-    try {
-      const newFavoritesList = favorites.filter(item => item.id !== favoriteId)
-      setFavorites(newFavoritesList)
-      await AsyncStorage.setItem(
-        favoritesData,
-        JSON.stringify(newFavoritesList),
-      )
-    } catch (error) {
-      throw new Error(error as string)
-    }
+    const newFavoritesList = favorites.filter(item => item.id !== favoriteId)
+    setFavorites(newFavoritesList)
+    await AsyncStorage.setItem(favoritesData, JSON.stringify(newFavoritesList))
+  }
+
+  const handlerFavorite = (image: UnsplashImage) => {
+    const isFavorite = favorites.find(item => {
+      return item.id === image.id
+    })
+    isFavorite ? removeFavorites(image.id) : addFavorites(image)
   }
 
   return (
     <FavoriteContext.Provider
       value={{
         favorites,
-        addFavorites,
-        removeFavorites,
+        handlerFavorite,
       }}
     >
       {children}

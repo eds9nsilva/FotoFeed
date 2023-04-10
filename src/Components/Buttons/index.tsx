@@ -1,21 +1,25 @@
 import React from 'react'
-import { ShareNetwork, DownloadSimple, BookmarkSimple } from 'phosphor-react-native'
+import {
+  DownloadSimple,
+  Bookmarks,
+} from 'phosphor-react-native'
 import { Container } from './styles'
 import { TouchableOpacity } from 'react-native'
 
 interface Props {
   download: () => void
   save: () => void
+  isFavorito: boolean
 }
 
-const Buttons = ({ download, save }: Props) => {
+const Buttons = ({ download, save, isFavorito }: Props) => {
   return (
     <Container>
-      <TouchableOpacity onPress={() => download()}  style={{ marginBottom: 38 }}>
+      <TouchableOpacity onPress={() => download()} style={{ marginBottom: 38 }}>
         <DownloadSimple color="#fff" size={38} />
       </TouchableOpacity>
       <TouchableOpacity onPress={() => save()}>
-        <BookmarkSimple color="#fff" size={38} />
+        <Bookmarks color={isFavorito ? '#f32512' : '#fff'} size={38} mirrored/>
       </TouchableOpacity>
     </Container>
   )

@@ -7,7 +7,6 @@ import { Container } from './styles'
 const Favorites = () => {
   const { favorites } = useContext(FavoriteContext)
 
-  console.log('FAVORITOS: ', favorites.length)
   return (
     <Container>
       <FlatList

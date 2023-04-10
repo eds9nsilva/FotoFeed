@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import { Platform, Alert, Dimensions } from 'react-native'
 import { Author, Content, ContentLoading, ImageBackground } from './styles'
 import { UnsplashImage } from '@/Services/Types/Photos'
@@ -16,8 +16,7 @@ const Home = () => {
   const height = Dimensions.get('window').height
   const { photos, filter, SearchPhotos, handlerMorePhotos } =
     useContext(PhotosContext)
-  const { addFavorites, removeFavorites, favorites } =
-    useContext(FavoriteContext)
+  const { handlerFavorite, favorites } = useContext(FavoriteContext)
 
   const handlerAlert = (url: string, name: string) =>
     Alert.alert('Aviso', 'Deseja fazer download desta imagem?', [
@@ -60,21 +59,14 @@ const Home = () => {
       })
   }
 
-  const handlerFavorite = (image: UnsplashImage) => {
-    const isFavorite = favorites.find(item => {
-      return item.id === image.id
-    })
-    console.log(isFavorite?.id)
-    if (isFavorite) {
-      console.log('ENTROU no remove')
-      removeFavorites(image.id)
-    } else {
-      console.log('ENTROU no add')
-      addFavorites(image)
-    }
-  }
+  const checkIsFavorite = useCallback((id: string) => {
+    const isFavorite = favorites.find(item => item.id == id)
+    return !!isFavorite
+  }, [favorites])
+
 
   const renderItem = ({ item }: Itens) => {
+    const isFavorite = checkIsFavorite(item.id)
     return (
       <>
         <ImageBackground
@@ -101,6 +93,7 @@ const Home = () => {
                 `Photo-by ${item.user?.username}`,
               )
             }
+            isFavorito={isFavorite}
             save={() => handlerFavorite(item)}
           />
           <Content>
@@ -115,6 +108,7 @@ const Home = () => {
     photos && (
       <FlashList
         data={photos}
+        extraData={favorites}
         keyExtractor={item => String(item.id)}
         renderItem={renderItem}
         pagingEnabled
