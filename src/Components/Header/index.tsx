@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { ButtonSearch, Container, InputSearch } from './styles'
-import { MagnifyingGlass, List } from 'phosphor-react-native'
+import Icon from 'react-native-vector-icons/MaterialIcons'
 import { TouchableOpacity } from 'react-native'
 import { DrawerActions, useNavigation } from '@react-navigation/native'
 interface Props {
@@ -22,7 +22,7 @@ const Header = ({ searchImages, valueSearch }: Props) => {
           activeOpacity={0.6}
           onPress={() => handleOpenDrawer()}
         >
-          <List color="#fff" size={41} style={{ right: 42 }} />
+          <Icon name="subject" color="#fff" size={41} style={{ right: 42 }} />
         </TouchableOpacity>
         <InputSearch
           placeholder="Pesquisar imagem"
@@ -34,7 +34,7 @@ const Header = ({ searchImages, valueSearch }: Props) => {
           onChangeText={value => setSearch(value)}
         />
         <ButtonSearch activeOpacity={0.6} onPress={() => searchImages(search)}>
-          <MagnifyingGlass size={22} color={'#fff'} />
+          <Icon name="search" size={26} color={'#fff'} />
         </ButtonSearch>
       </Container>
     </>

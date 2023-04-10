@@ -1,10 +1,7 @@
 import React from 'react'
-import {
-  DownloadSimple,
-  Bookmarks,
-} from 'phosphor-react-native'
 import { Container } from './styles'
 import { TouchableOpacity } from 'react-native'
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 interface Props {
   download: () => void
@@ -16,10 +13,10 @@ const Buttons = ({ download, save, isFavorito }: Props) => {
   return (
     <Container>
       <TouchableOpacity onPress={() => download()} style={{ marginBottom: 38 }}>
-        <DownloadSimple color="#fff" size={38} />
+        <Icon name='cloud-download' color="#fff" size={36} />
       </TouchableOpacity>
       <TouchableOpacity onPress={() => save()}>
-        <Bookmarks color={isFavorito ? '#f32512' : '#fff'} size={38} mirrored/>
+        <Icon name='bookmark' color={isFavorito ? '#bb1303' : '#fff'}  size={38} />
       </TouchableOpacity>
     </Container>
   )
