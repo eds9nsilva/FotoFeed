@@ -25,6 +25,7 @@
     "react": "18.2.0",
     "react-native": "0.71.2",
     "react-native-awesome-alerts": "^2.0.0",
+    "react-native-code-push": "^8.0.0",
     "react-native-dotenv": "^3.4.7",
     "react-native-fast-image": "^8.6.3",
     "react-native-fast-toast": "^3.0.1",
