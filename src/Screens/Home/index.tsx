@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Platform, Alert, Dimensions } from 'react-native'
 import { Author, Content, ContentLoading, ImageBackground } from './styles'
 import { UnsplashImage } from '@/Services/Types/Photos'
@@ -14,9 +14,9 @@ interface Itens {
 const Home = () => {
   const [loadingImage, setLoadingImage] = useState<boolean>(false)
   const height = Dimensions.get('window').height
-  const { photos, filter, SearchPhotos, handlerMorePhotos } =
-    useContext(PhotosContext)
-  const { handlerFavorite, favorites, checkIsFavorite } = useContext(FavoriteContext)
+  const { photos, handlerMorePhotos } = useContext(PhotosContext)
+  const { handlerFavorite, favorites, checkIsFavorite } =
+    useContext(FavoriteContext)
 
   const handlerAlert = (url: string, name: string) =>
     Alert.alert('Aviso', 'Deseja fazer download desta imagem?', [
@@ -59,8 +59,6 @@ const Home = () => {
       })
   }
 
-
-
   const renderItem = ({ item }: Itens) => {
     const isFavorite = checkIsFavorite(item.id)
     return (
@@ -73,10 +71,7 @@ const Home = () => {
           onLoadEnd={() => setLoadingImage(false)}
           resizeMode={'cover'}
         >
-          <Header
-            valueSearch={filter.query}
-            searchImages={query => SearchPhotos(query)}
-          />
+          <Header />
           {loadingImage && (
             <ContentLoading>
               <Loading type="9CubeGrid" size={42} color={'#fff'} />

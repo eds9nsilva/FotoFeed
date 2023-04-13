@@ -12,6 +12,7 @@ export interface IPhotosContext {
   updateFilter: (filte: Filter) => void
   handlerMorePhotos: () => void
   SearchPhotos: (query: string) => void
+  cleanFilter: () => void
 }
 
 interface IProps {
@@ -58,6 +59,18 @@ export const PhotosProvider: React.FunctionComponent<IProps> = ({
     setFilter(filter)
   }
 
+  const cleanFilter = () => {
+    updateFilter(DefaultFilter)
+    async function loadFotos() {
+      setLoading(true)
+      const response = await getPhotos(DefaultFilter).finally(() => {
+        setLoading(false)
+      })
+      !!response && setPhotos(response)
+    }
+    loadFotos()
+  }
+
   const SearchPhotos = async (query: string) => {
     const newFilter = {
       page: filter.query ? filter.page + 1 : 1,
@@ -96,6 +109,7 @@ export const PhotosProvider: React.FunctionComponent<IProps> = ({
         updateFilter,
         handlerMorePhotos,
         SearchPhotos,
+        cleanFilter
       }}
     >
       {children}
