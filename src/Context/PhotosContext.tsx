@@ -3,6 +3,7 @@ import { DefaultFilter } from '@/Constants/OptionFilter'
 import { getPhotos, searchPhotos } from '@/Services/Photos/getPhotos'
 import { Filter } from '@/Services/Types/Filters'
 import { UnsplashImage } from '@/Services/Types/Photos'
+import RNFetchBlob from 'rn-fetch-blob'
 
 export interface IPhotosContext {
   photos: UnsplashImage[]
@@ -13,6 +14,7 @@ export interface IPhotosContext {
   handlerMorePhotos: () => void
   SearchPhotos: (query: string) => void
   cleanFilter: () => void
+  downloadImage: (url: string, name: string) => void
 }
 
 interface IProps {
@@ -99,6 +101,34 @@ export const PhotosProvider: React.FunctionComponent<IProps> = ({
     }
   }
 
+  const downloadImage = async (url: string, name: string) => {
+    const { config, fs } = RNFetchBlob
+
+    let dirs = fs.dirs
+
+    let imagePath = dirs.PictureDir + name
+
+    await config({
+      fileCache: true,
+      appendExt: 'jpg',
+      indicator: true,
+      addAndroidDownloads: {
+        useDownloadManager: true,
+        notification: true,
+        mediaScannable: true,
+        title: name,
+        path: imagePath,
+      },
+      path: imagePath,
+    })
+      .fetch('GET', url)
+      .then(() => {
+        toast?.show('Download realizado com sucesso!', {
+          type: 'success',
+        })
+      })
+  }
+
   return (
     <PhotosContext.Provider
       value={{
@@ -109,7 +139,8 @@ export const PhotosProvider: React.FunctionComponent<IProps> = ({
         updateFilter,
         handlerMorePhotos,
         SearchPhotos,
-        cleanFilter
+        cleanFilter,
+        downloadImage,
       }}
     >
       {children}
