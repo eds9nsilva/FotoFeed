@@ -45,6 +45,7 @@ const Home = () => {
     }
    
   }
+
   const renderItem = ({ item }: Itens) => {
     const isFavorite = checkIsFavorite(item.id)
     return (
@@ -92,7 +93,7 @@ const Home = () => {
         decelerationRate="fast"
         snapToInterval={height}
         viewabilityConfig={{ itemVisiblePercentThreshold: 90 }}
-        onEndReached={handlerMorePhotos}
+        onEndReached={() => handlerMorePhotos()}
         onEndReachedThreshold={0.2}
         showsVerticalScrollIndicator={false}
       />

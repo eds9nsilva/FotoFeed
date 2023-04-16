@@ -12,7 +12,7 @@ export interface IPhotosContext {
   addPhotos: (filte: Filter) => void
   updateFilter: (filte: Filter) => void
   handlerMorePhotos: () => void
-  SearchPhotos: (query: string) => void
+  SearchPhotos: (filter: Filter) => void
   cleanFilter: () => void
   downloadImage: (url: string, name: string) => void
 }
@@ -29,14 +29,17 @@ export const PhotosProvider: React.FunctionComponent<IProps> = ({
   const [photos, setPhotos] = useState<UnsplashImage[]>([])
   const [filter, setFilter] = useState<Filter>(DefaultFilter)
   const [loading, setLoading] = useState<boolean>(false)
-
+  const [totalPage, setTotalPage] = useState<number | undefined>()
+ 
   useEffect(() => {
     async function loadFotos() {
       setLoading(true)
-      const response = await getPhotos(filter).finally(() => {
+      setFilter(DefaultFilter)
+      const response = await getPhotos(DefaultFilter).finally(() => {
         setLoading(false)
       })
-      !!response && setPhotos(response)
+      !!response?.data && setPhotos(response.data)
+      setTotalPage(response?.TotalPage)
     }
     loadFotos()
   }, [])
@@ -45,12 +48,9 @@ export const PhotosProvider: React.FunctionComponent<IProps> = ({
     setLoading(true)
     await getPhotos(filter)
       .then(response => {
-        if (filter.page === 1) {
-          !!response && setPhotos(response)
-        } else {
-          const newPhotos = [...photos, ...response]
-          setPhotos(newPhotos)
-        }
+        setTotalPage(response?.TotalPage)
+        const newPhotos = [...photos, ...response?.data]
+        setPhotos(newPhotos)
       })
       .finally(() => {
         setLoading(false)
@@ -65,37 +65,41 @@ export const PhotosProvider: React.FunctionComponent<IProps> = ({
     updateFilter(DefaultFilter)
     async function loadFotos() {
       setLoading(true)
+      setFilter(DefaultFilter)
       const response = await getPhotos(DefaultFilter).finally(() => {
         setLoading(false)
       })
-      !!response && setPhotos(response)
+      !response?.data && setPhotos(response?.data)
+      setFilter(response?.TotalPage)
     }
     loadFotos()
   }
 
-  const SearchPhotos = async (query: string) => {
-    const newFilter = {
-      page: filter.query ? filter.page + 1 : 1,
-      query,
-    }
-    updateFilter(newFilter)
-    await searchPhotos(newFilter).then(response => {
-      if (newFilter.page === 1) {
-        setPhotos(response.photos.results)
+  const SearchPhotos = async (filter: Filter) => {
+    await searchPhotos(filter).then(response => {
+      setTotalPage(response?.TotalPage)
+      if (filter.page === 1) {
+        setPhotos(response?.data)
       } else {
-        setPhotos([...photos, response.photos.results])
+        setPhotos([...photos, response?.data])
       }
     })
   }
 
   const handlerMorePhotos = () => {
+    if (filter.page === totalPage) {
+      toast?.show('Fim da lista!', {
+        type: 'warning',
+      })
+      return
+    }
     const newFilter = {
       ...filter,
       page: filter.page + 1,
     }
     updateFilter(newFilter)
     if (newFilter.query) {
-      SearchPhotos(newFilter.query)
+      SearchPhotos(newFilter)
     } else {
       addPhotos(newFilter)
     }

@@ -13,7 +13,8 @@ import { DrawerActions, useNavigation } from '@react-navigation/native'
 import { PhotosContext } from '@/Context/PhotosContext'
 
 const Header = () => {
-  const { filter, SearchPhotos, cleanFilter } = useContext(PhotosContext)
+  const { filter, SearchPhotos, cleanFilter, updateFilter } =
+    useContext(PhotosContext)
   const [search, setSearch] = useState(filter.query)
 
   const navigation = useNavigation()
@@ -25,6 +26,25 @@ const Header = () => {
   const handleCleanFilter = () => {
     cleanFilter()
     setSearch('')
+  }
+
+  const handleSearch = (search: string) => {
+    if (!search) {
+      toast?.show('Preencha o campo de pesquisa!', {
+        type: 'warning',
+      })
+      return
+    }
+  
+    console.log(search)
+    const newFilter = {
+      page: 1,
+      query: search,
+    }
+
+    updateFilter(newFilter)
+    SearchPhotos(newFilter)
+
   }
 
   const handleOpenDrawer = () => {
@@ -53,7 +73,7 @@ const Header = () => {
           />
           <ButtonSearch
             activeOpacity={0.6}
-            onPress={() => SearchPhotos(search)}
+            onPress={() => handleSearch(search)}
           >
             <Icon name="search" size={26} color={'#fff'} />
           </ButtonSearch>
