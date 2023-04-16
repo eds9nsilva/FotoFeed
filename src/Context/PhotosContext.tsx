@@ -3,6 +3,7 @@ import { DefaultFilter } from '@/Constants/OptionFilter'
 import { getPhotos, searchPhotos } from '@/Services/Photos/getPhotos'
 import { Filter } from '@/Services/Types/Filters'
 import { UnsplashImage } from '@/Services/Types/Photos'
+import RNFetchBlob from 'rn-fetch-blob'
 
 export interface IPhotosContext {
   photos: UnsplashImage[]
@@ -11,7 +12,9 @@ export interface IPhotosContext {
   addPhotos: (filte: Filter) => void
   updateFilter: (filte: Filter) => void
   handlerMorePhotos: () => void
-  SearchPhotos: (query: string) => void
+  SearchPhotos: (filter: Filter) => void
+  cleanFilter: () => void
+  downloadImage: (url: string, name: string) => void
 }
 
 interface IProps {
@@ -26,14 +29,17 @@ export const PhotosProvider: React.FunctionComponent<IProps> = ({
   const [photos, setPhotos] = useState<UnsplashImage[]>([])
   const [filter, setFilter] = useState<Filter>(DefaultFilter)
   const [loading, setLoading] = useState<boolean>(false)
-
+  const [totalPage, setTotalPage] = useState<number | undefined>()
+ 
   useEffect(() => {
     async function loadFotos() {
       setLoading(true)
-      const response = await getPhotos(filter).finally(() => {
+      setFilter(DefaultFilter)
+      const response = await getPhotos(DefaultFilter).finally(() => {
         setLoading(false)
       })
-      !!response && setPhotos(response)
+      !!response?.data && setPhotos(response.data)
+      setTotalPage(response?.TotalPage)
     }
     loadFotos()
   }, [])
@@ -42,12 +48,9 @@ export const PhotosProvider: React.FunctionComponent<IProps> = ({
     setLoading(true)
     await getPhotos(filter)
       .then(response => {
-        if (filter.page === 1) {
-          !!response && setPhotos(response)
-        } else {
-          const newPhotos = [...photos, ...response]
-          setPhotos(newPhotos)
-        }
+        setTotalPage(response?.TotalPage)
+        const newPhotos = [...photos, ...response?.data]
+        setPhotos(newPhotos)
       })
       .finally(() => {
         setLoading(false)
@@ -58,32 +61,76 @@ export const PhotosProvider: React.FunctionComponent<IProps> = ({
     setFilter(filter)
   }
 
-  const SearchPhotos = async (query: string) => {
-    const newFilter = {
-      page: filter.query ? filter.page + 1 : 1,
-      query,
+  const cleanFilter = () => {
+    updateFilter(DefaultFilter)
+    async function loadFotos() {
+      setLoading(true)
+      setFilter(DefaultFilter)
+      const response = await getPhotos(DefaultFilter).finally(() => {
+        setLoading(false)
+      })
+      !response?.data && setPhotos(response?.data)
+      setFilter(response?.TotalPage)
     }
-    updateFilter(newFilter)
-    await searchPhotos(newFilter).then(response => {
-      if (newFilter.page === 1) {
-        setPhotos(response.photos.results)
+    loadFotos()
+  }
+
+  const SearchPhotos = async (filter: Filter) => {
+    await searchPhotos(filter).then(response => {
+      setTotalPage(response?.TotalPage)
+      if (filter.page === 1) {
+        setPhotos(response?.data)
       } else {
-        setPhotos([...photos, response.photos.results])
+        setPhotos([...photos, response?.data])
       }
     })
   }
 
   const handlerMorePhotos = () => {
+    if (filter.page === totalPage) {
+      toast?.show('Fim da lista!', {
+        type: 'warning',
+      })
+      return
+    }
     const newFilter = {
       ...filter,
       page: filter.page + 1,
     }
     updateFilter(newFilter)
     if (newFilter.query) {
-      SearchPhotos(newFilter.query)
+      SearchPhotos(newFilter)
     } else {
       addPhotos(newFilter)
     }
+  }
+
+  const downloadImage = async (url: string, name: string) => {
+    const { config, fs } = RNFetchBlob
+
+    let dirs = fs.dirs
+
+    let imagePath = dirs.PictureDir + name
+
+    await config({
+      fileCache: true,
+      appendExt: 'jpg',
+      indicator: true,
+      addAndroidDownloads: {
+        useDownloadManager: true,
+        notification: true,
+        mediaScannable: true,
+        title: name,
+        path: imagePath,
+      },
+      path: imagePath,
+    })
+      .fetch('GET', url)
+      .then(() => {
+        toast?.show('Download realizado com sucesso!', {
+          type: 'success',
+        })
+      })
   }
 
   return (
@@ -96,6 +143,8 @@ export const PhotosProvider: React.FunctionComponent<IProps> = ({
         updateFilter,
         handlerMorePhotos,
         SearchPhotos,
+        cleanFilter,
+        downloadImage,
       }}
     >
       {children}

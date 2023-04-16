@@ -3,11 +3,16 @@ import styled from 'styled-components/native'
 export const Container = styled.KeyboardAvoidingView`
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   padding-top: 10%;
 `
 
+export const Content = styled.View`
+  flex-direction: row;
+`
+
 export const InputSearch = styled.TextInput`
-  width: 40%;
+  width: 160px;
   height: 40px;
   border-top-left-radius: 1px;
   border-bottom-left-radius: 1px;
@@ -26,4 +31,17 @@ export const ButtonSearch = styled.TouchableOpacity`
   border-color: #fff;
   align-items: center;
   justify-content: center;
+`
+
+export const ButtonClose = styled.TouchableOpacity`
+  width: 50px;
+  height: 40px;
+  border-width: 2px;
+  border-color: #fff;
+  align-items: center;
+  justify-content: center;
+`
+export const TextClean = styled.Text`
+  color: #fff;
+  font-size: 12px;
 `
