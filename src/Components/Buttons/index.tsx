@@ -16,7 +16,7 @@ const Buttons = ({ download, save, isFavorito }: Props) => {
         <Icon name='cloud-download' color="#fff" size={36} />
       </TouchableOpacity>
       <TouchableOpacity onPress={() => save()}>
-        <Icon name='bookmark' color={isFavorito ? '#bb1303' : '#fff'}  size={38} />
+        <Icon name='bookmark' color={isFavorito ? '#F14624' : '#fff'}  size={38} />
       </TouchableOpacity>
     </Container>
   )

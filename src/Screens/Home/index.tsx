@@ -51,6 +51,7 @@ const Home = () => {
     return (
       <>
         <ImageBackground
+          key={item.id}
           source={{
             uri: item.urls?.regular ? item.urls?.regular : item.urls?.small,
           }}
@@ -66,10 +67,7 @@ const Home = () => {
           )}
           <Buttons
             download={() =>
-              handlerAlert(
-                item.urls?.regular ? item.urls?.regular : item.urls?.small,
-                `Photo-by ${item.user?.username}`,
-              )
+              handlerAlert(item.links.download, `Photo-by-${item.user?.username}`)
             }
             isFavorito={isFavorite}
             save={() => handlerFavorite(item)}
@@ -96,7 +94,7 @@ const Home = () => {
       }
       viewabilityConfig={{ itemVisiblePercentThreshold: 90 }}
       onEndReached={() => handlerMorePhotos()}
-      onEndReachedThreshold={0.2}
+      onEndReachedThreshold={0.1}
       showsVerticalScrollIndicator={false}
     />
   )
