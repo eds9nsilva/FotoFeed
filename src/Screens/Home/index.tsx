@@ -2,11 +2,12 @@ import React, { useContext, useState } from 'react'
 import { Alert, Dimensions, PermissionsAndroid } from 'react-native'
 import { Author, Content, ContentLoading, ImageBackground } from './styles'
 import { UnsplashImage } from '@/Services/Types/Photos'
-import { Buttons, Header } from '@/Components'
+import { Buttons, Header, Empyt } from '@/Components'
 import Loading from 'react-native-spinkit'
 import { FlashList } from '@shopify/flash-list'
 import { PhotosContext } from '@/Context/PhotosContext'
 import { FavoriteContext } from '@/Context/FavoritesContext'
+
 interface Itens {
   item: UnsplashImage
 }
@@ -29,7 +30,7 @@ const Home = () => {
           buttonNegative: 'Cancelar',
           buttonPositive: 'OK',
         },
-      );
+      )
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         Alert.alert('Aviso', 'Deseja fazer download desta imagem?', [
           {
@@ -41,9 +42,8 @@ const Home = () => {
         ])
       }
     } catch (err) {
-      console.warn(err);
+      console.warn(err)
     }
-   
   }
 
   const renderItem = ({ item }: Itens) => {
@@ -51,6 +51,7 @@ const Home = () => {
     return (
       <>
         <ImageBackground
+          key={item.id}
           source={{
             uri: item.urls?.regular ? item.urls?.regular : item.urls?.small,
           }}
@@ -66,10 +67,7 @@ const Home = () => {
           )}
           <Buttons
             download={() =>
-              handlerAlert(
-                item.urls?.regular ? item.urls?.regular : item.urls?.small,
-                `Photo-by ${item.user?.username}`,
-              )
+              handlerAlert(item.links.download, `Photo-by-${item.user?.username}`)
             }
             isFavorito={isFavorite}
             save={() => handlerFavorite(item)}
@@ -83,21 +81,22 @@ const Home = () => {
   }
 
   return (
-    photos && (
-      <FlashList
-        data={photos}
-        extraData={favorites}
-        keyExtractor={item => String(item.id)}
-        renderItem={renderItem}
-        pagingEnabled
-        decelerationRate="fast"
-        snapToInterval={height}
-        viewabilityConfig={{ itemVisiblePercentThreshold: 90 }}
-        onEndReached={() => handlerMorePhotos()}
-        onEndReachedThreshold={0.2}
-        showsVerticalScrollIndicator={false}
-      />
-    )
+    <FlashList
+      data={photos}
+      extraData={favorites}
+      keyExtractor={item => String(item.id)}
+      renderItem={renderItem}
+      pagingEnabled
+      decelerationRate="fast"
+      snapToInterval={height}
+      ListEmptyComponent={
+        <Empyt text="Infelizmente ocorreu um erro ao carregar as fotos, tente novamente mais tarde!" />
+      }
+      viewabilityConfig={{ itemVisiblePercentThreshold: 90 }}
+      onEndReached={() => handlerMorePhotos()}
+      onEndReachedThreshold={0.1}
+      showsVerticalScrollIndicator={false}
+    />
   )
 }
 

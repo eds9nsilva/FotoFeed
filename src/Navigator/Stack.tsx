@@ -10,13 +10,16 @@ const Stack = createStackNavigator()
 
 const StackNavigator = () => {
   const netInfo = useNetInfo()
-  const [isConnected, setIsConnected] = useState<boolean | null>(true)
+  const [isConnected, setIsConnected] = useState<boolean>(true)
 
   useEffect(() => {
-    setIsConnected(netInfo.isConnected)
+    const connected = netInfo.isConnected
+    if(!!connected) {
+      setIsConnected(connected)
+    }
   }, [netInfo])
 
-  return isConnected ? (
+  return !!isConnected ? (
     <PhotosProvider>
       <FavoriteProvider>
         <Stack.Navigator

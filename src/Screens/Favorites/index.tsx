@@ -1,9 +1,9 @@
 import React, { useContext } from 'react'
-import { FlatList, Image } from 'react-native'
+import { FlatList } from 'react-native'
 import { FavoriteContext } from '@/Context/FavoritesContext'
 import { Card } from './Component/Card'
-import { Container, ContainerEmpyt, TextEmpyt } from './styles'
-import empyt from '@/Asserts/empty-photos.png'
+import { Container } from './styles'
+import { Empyt } from '@/Components'
 
 const Favorites = () => {
   const { favorites } = useContext(FavoriteContext)
@@ -17,10 +17,7 @@ const Favorites = () => {
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => <Card image={item} />}
         ListEmptyComponent={
-          <ContainerEmpyt>
-            <Image source={empyt} />
-            <TextEmpyt>Você não tem nenhuma imagem como favorita</TextEmpyt>
-          </ContainerEmpyt>
+          <Empyt text="Você não tem nenhuma imagem como favorita" />
         }
       />
     </Container>

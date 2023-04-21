@@ -4,7 +4,6 @@ import { Filter } from '../Types/Filters'
 
 export const getPhotos = async (payload: Filter) => {
   try {
-    console.log('Chamou com o payload: ', payload.page)
     const res = await instance.get<UnsplashImage[]>(
       `/photos?page=${payload.page}`,
     )
