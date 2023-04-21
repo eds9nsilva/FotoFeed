@@ -4,6 +4,7 @@ import { getPhotos, searchPhotos } from '@/Services/Photos/getPhotos'
 import { Filter } from '@/Services/Types/Filters'
 import { UnsplashImage } from '@/Services/Types/Photos'
 import RNFetchBlob from 'rn-fetch-blob'
+import { Platform } from 'react-native'
 
 export interface IPhotosContext {
   photos: UnsplashImage[]
@@ -107,15 +108,18 @@ export const PhotosProvider: React.FunctionComponent<IProps> = ({
 
   const downloadImage = async (url: string, name: string) => {
     const { config, fs } = RNFetchBlob
-
-    let dirs = fs.dirs
-
-    let imagePath = dirs.PictureDir + name
-
-    await config({
+    const { DownloadDir, PictureDir } = fs.dirs
+    const platform = Platform.OS
+    const isIOS = platform === 'ios'
+    const isAndroid = platform === 'android'
+    let imagePath = ''
+    if (isIOS) {
+      imagePath = `${DownloadDir}/${name}`
+    } else if (isAndroid) {
+      imagePath = `${PictureDir}/${name}`
+    }
+    config({
       fileCache: true,
-      appendExt: 'jpg',
-      indicator: true,
       addAndroidDownloads: {
         useDownloadManager: true,
         notification: true,
@@ -130,6 +134,7 @@ export const PhotosProvider: React.FunctionComponent<IProps> = ({
         toast?.show('Download realizado com sucesso!', {
           type: 'success',
         })
+        
       })
   }
 
