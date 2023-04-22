@@ -5,18 +5,22 @@ import { PhotosProvider } from '@/Context/PhotosContext'
 import { useNetInfo } from '@react-native-community/netinfo'
 import { DetailsFavorite, Favorites, Network } from '@/Screens'
 import { FavoriteProvider } from '@/Context/FavoritesContext'
+import { Colors } from '@/Styles/Colors'
 
 const Stack = createStackNavigator()
 
 const StackNavigator = () => {
   const netInfo = useNetInfo()
-  const [isConnected, setIsConnected] = useState<boolean | null>(true)
+  const [isConnected, setIsConnected] = useState<boolean>(true)
 
   useEffect(() => {
-    setIsConnected(netInfo.isConnected)
+    const connected = netInfo.isConnected
+    if(!!connected) {
+      setIsConnected(connected)
+    }
   }, [netInfo])
 
-  return isConnected ? (
+  return !!isConnected ? (
     <PhotosProvider>
       <FavoriteProvider>
         <Stack.Navigator
@@ -29,9 +33,9 @@ const StackNavigator = () => {
             component={Favorites}
             options={{
               headerShown: true,
-              headerTintColor: '#fff',
+              headerTintColor: Colors.secundary,
               headerStyle: {
-                backgroundColor: '#181a20',
+                backgroundColor: Colors.primary,
               },
               headerTitle: 'Favoritos',
             }}

@@ -61,4 +61,5 @@ export interface Photos {
   photos: UnsplashImage[]
   filter: Filter
   loading: boolean
+  totalPage?: number
 }

@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { StatusBar } from 'react-native'
 import { navigationRef } from './Root'
 import StackNavigator from './Stack'
+import { Colors } from '@/Styles/Colors'
 
 const Stack = createStackNavigator()
 
@@ -11,7 +12,7 @@ const ApplicationNavigator = () => {
   return (
     <NavigationContainer ref={navigationRef}>
       <StatusBar
-        backgroundColor="#181a20"
+        backgroundColor={Colors.primary}
         barStyle={'light-content'}
       />
       <Stack.Navigator

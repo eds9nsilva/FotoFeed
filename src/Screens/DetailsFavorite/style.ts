@@ -1,5 +1,6 @@
 import styled from 'styled-components/native'
 import { Dimensions } from 'react-native'
+import { Colors } from '@/Styles/Colors'
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
@@ -7,13 +8,13 @@ export const ImageBackground = styled.ImageBackground`
   width: ${width}px;
   height: ${height}px;
   align-items: center;
-  background-color: #181a20;
+  background-color: ${Colors.primary};
 `
 
 export const Text = styled.Text`
   font-size: 16px;
   font-weight: 600;
-  color: #181a20;
+  color: ${Colors.secundary};
 `
 
 export const GoBack = styled.TouchableOpacity`
@@ -23,7 +24,7 @@ export const GoBack = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
   flex-direction: row;
-  background-color: #fff;
+  background-color: ${Colors.secundary};
   position: absolute;
   left: 38px;
   top: 22px;
@@ -38,7 +39,7 @@ export const Content = styled.View`
 export const Author = styled.Text`
   font-size: 18px;
   font-weight: 600;
-  color: #fff;
+  color: ${Colors.secundary};
 `
 
 export const ContentLoading = styled.View`

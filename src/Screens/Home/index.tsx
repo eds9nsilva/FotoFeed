@@ -1,71 +1,57 @@
-import React, { useCallback, useContext, useState } from 'react'
-import { Platform, Alert, Dimensions } from 'react-native'
+import React, { useContext, useState } from 'react'
+import { Alert, Dimensions, PermissionsAndroid } from 'react-native'
 import { Author, Content, ContentLoading, ImageBackground } from './styles'
 import { UnsplashImage } from '@/Services/Types/Photos'
-import { Buttons, Header } from '@/Components'
-import RNFetchBlob from 'rn-fetch-blob'
+import { Buttons, Header, Empyt } from '@/Components'
 import Loading from 'react-native-spinkit'
 import { FlashList } from '@shopify/flash-list'
 import { PhotosContext } from '@/Context/PhotosContext'
 import { FavoriteContext } from '@/Context/FavoritesContext'
+
 interface Itens {
   item: UnsplashImage
 }
 const Home = () => {
   const [loadingImage, setLoadingImage] = useState<boolean>(false)
   const height = Dimensions.get('window').height
-  const { photos, filter, SearchPhotos, handlerMorePhotos } =
-    useContext(PhotosContext)
-  const { handlerFavorite, favorites, checkIsFavorite } = useContext(FavoriteContext)
+  const { photos, handlerMorePhotos, downloadImage } = useContext(PhotosContext)
+  const { handlerFavorite, favorites, checkIsFavorite } =
+    useContext(FavoriteContext)
 
-  const handlerAlert = (url: string, name: string) =>
-    Alert.alert('Aviso', 'Deseja fazer download desta imagem?', [
-      {
-        text: 'Cancelar',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel',
-      },
-      { text: 'Baixar', onPress: () => downloadImage(url, name) },
-    ])
-
-  const downloadImage = (url: string, name: string) => {
-    const { config, fs } = RNFetchBlob
-    const { DownloadDir, PictureDir } = fs.dirs
-    const platform = Platform.OS
-    const isIOS = platform === 'ios'
-    const isAndroid = platform === 'android'
-    let imagePath = ''
-    if (isIOS) {
-      imagePath = `${DownloadDir}/${name}`
-    } else if (isAndroid) {
-      imagePath = `${PictureDir}/${name}`
+  const handlerAlert = async (url: string, name: string) => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        {
+          title: 'Permissão para salvar arquivos',
+          message:
+            'Este aplicativo precisa da permissão de armazenamento externo para salvar arquivos.',
+          buttonNeutral: 'Perguntar depois',
+          buttonNegative: 'Cancelar',
+          buttonPositive: 'OK',
+        },
+      )
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        Alert.alert('Aviso', 'Deseja fazer download desta imagem?', [
+          {
+            text: 'Cancelar',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          { text: 'Baixar', onPress: () => downloadImage(url, name) },
+        ])
+      }
+    } catch (err) {
+      console.warn(err)
     }
-    config({
-      fileCache: true,
-      addAndroidDownloads: {
-        useDownloadManager: true,
-        notification: true,
-        mediaScannable: true,
-        title: name,
-        path: imagePath,
-      },
-      path: imagePath,
-    })
-      .fetch('GET', url)
-      .then(() => {
-        toast?.show('Download realizado com sucesso!', {
-          type: 'success',
-        })
-      })
   }
-
-
 
   const renderItem = ({ item }: Itens) => {
     const isFavorite = checkIsFavorite(item.id)
     return (
       <>
         <ImageBackground
+          key={item.id}
           source={{
             uri: item.urls?.regular ? item.urls?.regular : item.urls?.small,
           }}
@@ -73,10 +59,7 @@ const Home = () => {
           onLoadEnd={() => setLoadingImage(false)}
           resizeMode={'cover'}
         >
-          <Header
-            valueSearch={filter.query}
-            searchImages={query => SearchPhotos(query)}
-          />
+          <Header />
           {loadingImage && (
             <ContentLoading>
               <Loading type="9CubeGrid" size={42} color={'#fff'} />
@@ -84,10 +67,7 @@ const Home = () => {
           )}
           <Buttons
             download={() =>
-              handlerAlert(
-                item.urls?.regular ? item.urls?.regular : item.urls?.small,
-                `Photo-by ${item.user?.username}`,
-              )
+              handlerAlert(item.links.download, `Photo-by-${item.user?.username}`)
             }
             isFavorito={isFavorite}
             save={() => handlerFavorite(item)}
@@ -101,21 +81,22 @@ const Home = () => {
   }
 
   return (
-    photos && (
-      <FlashList
-        data={photos}
-        extraData={favorites}
-        keyExtractor={item => String(item.id)}
-        renderItem={renderItem}
-        pagingEnabled
-        decelerationRate="fast"
-        snapToInterval={height}
-        viewabilityConfig={{ itemVisiblePercentThreshold: 90 }}
-        onEndReached={handlerMorePhotos}
-        onEndReachedThreshold={0.2}
-        showsVerticalScrollIndicator={false}
-      />
-    )
+    <FlashList
+      data={photos}
+      extraData={favorites}
+      keyExtractor={item => String(item.id)}
+      renderItem={renderItem}
+      pagingEnabled
+      decelerationRate="fast"
+      snapToInterval={height}
+      ListEmptyComponent={
+        <Empyt text="Infelizmente ocorreu um erro ao carregar as fotos, tente novamente mais tarde!" />
+      }
+      viewabilityConfig={{ itemVisiblePercentThreshold: 90 }}
+      onEndReached={() => handlerMorePhotos()}
+      onEndReachedThreshold={0.1}
+      showsVerticalScrollIndicator={false}
+    />
   )
 }
 

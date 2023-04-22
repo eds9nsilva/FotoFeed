@@ -11,10 +11,11 @@ import {
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { Buttons } from '@/Components'
 import Loading from 'react-native-spinkit'
-import RNFetchBlob from 'rn-fetch-blob'
-import { Alert, Platform } from 'react-native'
+import { Alert, PermissionsAndroid } from 'react-native'
 import { FavoriteContext } from '@/Context/FavoritesContext'
 import Icon from 'react-native-vector-icons/MaterialIcons'
+import { PhotosContext } from '@/Context/PhotosContext'
+import { Colors } from '@/Styles/Colors'
 
 const DetailsFavorite = () => {
   const route = useRoute()
@@ -22,46 +23,34 @@ const DetailsFavorite = () => {
   const [loadingImage, setLoadingImage] = useState<boolean>(false)
   const image = route.params as UnsplashImage
   const { handlerFavorite, checkIsFavorite } = useContext(FavoriteContext)
+  const { downloadImage } = useContext(PhotosContext)
 
-  const handlerAlert = (url: string, name: string) =>
-    Alert.alert('Aviso', 'Deseja fazer download desta imagem?', [
-      {
-        text: 'Cancelar',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel',
-      },
-      { text: 'Baixar', onPress: () => downloadImage(url, name) },
-    ])
-
-  const downloadImage = (url: string, name: string) => {
-    const { config, fs } = RNFetchBlob
-    const { DownloadDir, PictureDir } = fs.dirs
-    const platform = Platform.OS
-    const isIOS = platform === 'ios'
-    const isAndroid = platform === 'android'
-    let imagePath = ''
-    if (isIOS) {
-      imagePath = `${DownloadDir}/${name}`
-    } else if (isAndroid) {
-      imagePath = `${PictureDir}/${name}`
+  const handlerAlert = async (url: string, name: string) => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        {
+          title: 'Permissão para salvar arquivos',
+          message:
+            'Este aplicativo precisa da permissão de armazenamento externo para salvar arquivos.',
+          buttonNeutral: 'Perguntar depois',
+          buttonNegative: 'Cancelar',
+          buttonPositive: 'OK',
+        },
+      )
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        Alert.alert('Aviso', 'Deseja fazer download desta imagem?', [
+          {
+            text: 'Cancelar',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          { text: 'Baixar', onPress: () => downloadImage(url, name) },
+        ])
+      }
+    } catch (err) {
+      console.warn(err)
     }
-    config({
-      fileCache: true,
-      addAndroidDownloads: {
-        useDownloadManager: true,
-        notification: true,
-        mediaScannable: true,
-        title: name,
-        path: imagePath,
-      },
-      path: imagePath,
-    })
-      .fetch('GET', url)
-      .then(() => {
-        toast?.show('Download realizado com sucesso!', {
-          type: 'success',
-        })
-      })
   }
 
   const isFavorite = checkIsFavorite(image.id)
@@ -76,13 +65,13 @@ const DetailsFavorite = () => {
       resizeMode={'cover'}
     >
       <GoBack onPress={() => goBack()}>
-        <Icon name='arrow-back' color='#000' size={26} />
+        <Icon name='arrow-back' color={Colors.black} size={26} />
         <Text>Voltar</Text>
       </GoBack>
 
       {loadingImage && (
         <ContentLoading>
-          <Loading type="9CubeGrid" size={42} color={'#fff'} />
+          <Loading type="9CubeGrid" size={42} color={Colors.secundary} />
         </ContentLoading>
       )}
       <Buttons
