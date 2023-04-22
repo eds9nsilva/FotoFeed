@@ -5,6 +5,7 @@ import { PhotosProvider } from '@/Context/PhotosContext'
 import { useNetInfo } from '@react-native-community/netinfo'
 import { DetailsFavorite, Favorites, Network } from '@/Screens'
 import { FavoriteProvider } from '@/Context/FavoritesContext'
+import { Colors } from '@/Styles/Colors'
 
 const Stack = createStackNavigator()
 
@@ -32,9 +33,9 @@ const StackNavigator = () => {
             component={Favorites}
             options={{
               headerShown: true,
-              headerTintColor: '#fff',
+              headerTintColor: Colors.secundary,
               headerStyle: {
-                backgroundColor: '#181a20',
+                backgroundColor: Colors.primary,
               },
               headerTitle: 'Favoritos',
             }}

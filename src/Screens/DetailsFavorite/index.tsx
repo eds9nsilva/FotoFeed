@@ -15,6 +15,7 @@ import { Alert, PermissionsAndroid } from 'react-native'
 import { FavoriteContext } from '@/Context/FavoritesContext'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { PhotosContext } from '@/Context/PhotosContext'
+import { Colors } from '@/Styles/Colors'
 
 const DetailsFavorite = () => {
   const route = useRoute()
@@ -64,13 +65,13 @@ const DetailsFavorite = () => {
       resizeMode={'cover'}
     >
       <GoBack onPress={() => goBack()}>
-        <Icon name='arrow-back' color='#000' size={26} />
+        <Icon name='arrow-back' color={Colors.black} size={26} />
         <Text>Voltar</Text>
       </GoBack>
 
       {loadingImage && (
         <ContentLoading>
-          <Loading type="9CubeGrid" size={42} color={'#fff'} />
+          <Loading type="9CubeGrid" size={42} color={Colors.secundary} />
         </ContentLoading>
       )}
       <Buttons
