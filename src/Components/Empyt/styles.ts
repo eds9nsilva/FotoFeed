@@ -1,3 +1,4 @@
+import { Colors } from '@/Styles/Colors'
 import { Dimensions } from 'react-native'
 import styled from 'styled-components/native'
 
@@ -9,7 +10,7 @@ export const ContainerEmpyt = styled.View`
   padding-right: 12%;
   align-items: center;
   justify-content: center;
-  background-color: #181a20;
+  background-color: ${Colors.primary};
   width: ${width}px;
   height: ${height}px;
   flex: 1;
@@ -19,6 +20,6 @@ export const TextEmpyt = styled.Text`
   font-size: 20px;
   font-weight: 700;
   text-align: center;
-  color: #fff;
+  color: ${Colors.secundary};
   margin-top: 12px;
 `

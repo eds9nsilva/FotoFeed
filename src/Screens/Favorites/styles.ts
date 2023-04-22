@@ -1,6 +1,7 @@
+import { Colors } from '@/Styles/Colors'
 import styled from 'styled-components/native'
 
 export const Container = styled.View`
   flex: 1;
-  background-color: #181a20;
+  background-color: ${Colors.primary};
 `

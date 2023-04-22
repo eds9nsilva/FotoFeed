@@ -1,3 +1,4 @@
+import { Colors } from '@/Styles/Colors'
 import styled from 'styled-components/native'
 
 export const Container = styled.KeyboardAvoidingView`
@@ -17,9 +18,9 @@ export const InputSearch = styled.TextInput`
   border-top-left-radius: 1px;
   border-bottom-left-radius: 1px;
   border-width: 2px;
-  border-color: #fff;
+  border-color: ${Colors.secundary};
   padding-left: 12px;
-  color: #fff;
+  color: ${Colors.secundary};
 `
 export const ButtonSearch = styled.TouchableOpacity`
   width: 40px;
@@ -28,7 +29,7 @@ export const ButtonSearch = styled.TouchableOpacity`
   border-top-right-radius: 1px;
   border-left-width: 0px;
   border-width: 2px;
-  border-color: #fff;
+  border-color: ${Colors.secundary};
   align-items: center;
   justify-content: center;
 `
@@ -37,11 +38,11 @@ export const ButtonClose = styled.TouchableOpacity`
   width: 50px;
   height: 40px;
   border-width: 2px;
-  border-color: #fff;
+  border-color: ${Colors.secundary};
   align-items: center;
   justify-content: center;
 `
 export const TextClean = styled.Text`
-  color: #fff;
+  color: ${Colors.secundary};
   font-size: 12px;
 `
