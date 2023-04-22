@@ -14,7 +14,7 @@ export const ImageBackground = styled.ImageBackground`
 export const Text = styled.Text`
   font-size: 16px;
   font-weight: 600;
-  color: ${Colors.secundary};
+  color: ${Colors.primary};
 `
 
 export const GoBack = styled.TouchableOpacity`

@@ -19,7 +19,7 @@ export const InputSearch = styled.TextInput`
   border-bottom-left-radius: 1px;
   border-width: 2px;
   border-color: ${Colors.secundary};
-  padding-left: 12px;
+  padding-left: 18px;
   color: ${Colors.secundary};
 `
 export const ButtonSearch = styled.TouchableOpacity`
