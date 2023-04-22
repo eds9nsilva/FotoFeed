@@ -7,56 +7,34 @@ Em resumo, o FotoFeed é um aplicativo de rolagem de fotos e salvamento de favor
 
 # Screenshots
 <p align="center">
-  <img width = "250" height= "500" src = "src/assets/Screenshot/Screenshot_1.png">
-  <img width = "250" height= "500" src = "src/assets/Screenshot/Screenshot_2.png">
-  <img width = "250" height= "500" src = "src/assets/Screenshot/Screenshot_3.png">
+  <img width = "250" height= "500" src = "src/Asserts/Screenshot/1.png">
+  <img width = "250" height= "500" src = "src/Asserts/Screenshot/2.png">
+  <img width = "250" height= "500" src = "src/Asserts/Screenshot/3.png">
 </p>
 
 <p align="center">
-  <img width = "250" height= "500" src = "src/assets/Screenshot/Screenshot_4.png">
-  <img width = "250" height= "500" src = "src/assets/Screenshot/Screenshot_5.png">
-  <img width = "250" height= "500" src = "src/assets/Screenshot/Screenshot_6.png"> 
+  <img width = "250" height= "500" src = "src/Asserts/Screenshot/4.png">
+  <img width = "250" height= "500" src = "src/Asserts/Screenshot/5.png">
+  <img width = "250" height= "500" src = "src/Asserts/Screenshot/6.png"> 
 </p>
 <p align="center">
-  <img width = "250" height= "500" src = "src/assets/Screenshot/Screenshot_7.png">
-  <img width = "250" height= "500" src = "src/assets/Screenshot/Screenshot_8.png">
-  <img width = "250" height= "500" src = "src/assets/Screenshot/Screenshot_9.png"> 
-</p>
-<p align="center">
-  <img width = "250" height= "500" src = "src/assets/Screenshot/Screenshot_10.png">
+  <img width = "250" height= "500" src = "src/Asserts/Screenshot/7.png">
+  <img width = "250" height= "500" src = "src/Asserts/Screenshot/gif.gif">
+  <img width = "250" height= "500" src = "src/Asserts/Screenshot/gif.gif">
 </p>
 
 ## 💻:iphone:Tecnologias utilizadas 
 
 - `React Native`
 - `TypeScript`
-- `Expo`
 - `Async-storage`
 - `ContextApi`
-- `React-native-app-intro-slider`
-- `React-native-render-html`
-- `React-native-spinkit`
 - `Axios`
+- `react-native-code-push`
+- `appcenter`
 - `Styled-components`
 ---
 
-### Clonar o repositório e instalar as dependências
 
-```
-$ git clone https://github.com/eds9nsilva/InforSeries.git
-```
-```
-cd InforSeries
-```
-##### Instalando as depedências
-```
-yarn ou npm install
-```
-
-> Executando. Você precisa do emulador instalado ou celular conectado via USB em modo desenvolverdor. :warning:
-```
-expo start
-```
----
 Made with ☕ by Edson da Silva
 
