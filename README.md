@@ -1,12 +1,9 @@
-# # Infor Series
-Infor Series é um app em react Native, onde o usuário pode buscar informações sobre séries. <br>
-A aplicação utiliza a api [TVMaze](https://www.tvmaze.com/api)
+# # FotoFeed
+Em resumo, o FotoFeed é um aplicativo de rolagem de fotos e salvamento de favoritos é uma ótima opção para aqueles que querem descobrir novas imagens e fotografias em um formato fácil de usar e salvar suas favoritas para acesso futuro. Ele oferece uma experiência de visualização de imagem simples e intuitiva. <br>
 
 <p align="center">
-<img src="https://img.shields.io/badge/STATUS-Desenvolvimento-yellow"/>
+<img src="https://img.shields.io/badge/Status-Concluido-green"/>
 </p>
-
-> OBS: O projeto ainda não está finalizado por completo, mas o resultado até o momento você pode ver nos prints abaixo :warning:
 
 # Screenshots
 <p align="center">
