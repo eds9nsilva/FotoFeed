@@ -15,12 +15,12 @@ const StackNavigator = () => {
 
   useEffect(() => {
     const connected = netInfo.isConnected
-    if(!!connected) {
+    if(connected !== null) {
       setIsConnected(connected)
     }
   }, [netInfo])
 
-  return !!isConnected ? (
+  return isConnected ? (
     <PhotosProvider>
       <FavoriteProvider>
         <Stack.Navigator
